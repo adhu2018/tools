@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import hashlib
+import os
 import re
 try:
     from requests_html import HTMLSession
@@ -144,6 +145,31 @@ def chapterNum(aForHtml):
                         num += int(re.search(r"\d", i)[0]) * (10**temp)
             aForHtml = re.sub(r"第[^0-9章节回(部分)]+([章节回(部分)])", "第"+str(num)+b, aForHtml)
     return aForHtml
+
+# download_("http://www.baidu.com"[, path])
+def download_(*_str):
+    if len(_str) > 0:
+        url = _str[0]
+        type = re.sub(r".*//[^/]*", r"", url)
+        type = re.sub(r"[@\?].*", r"", type)
+        type = re.sub(r".*/", r"", type)
+        try:
+            type = re.match(r".*?(\.[^\.]*)$",type)[1]
+        except:
+            type = ""
+    else:
+        return False
+    if len(_str) > 1:
+        fpath = _str[1] + md5(url) + type
+    else:
+        fpath = md5(url) + type
+    r = session.get(url)
+    if r.status_code == 200:
+        if not os.path.exists(fpath):
+            with open(fpath, "wb+") as f:
+                f.write(r.content)
+    del r
+    return os.path.abspath(fpath)
 
 # md5(str[, encoding]) or md5(bytes)
 def md5(*_str):
