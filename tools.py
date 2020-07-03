@@ -171,6 +171,29 @@ def download_(*_str):
     del r
     return os.path.abspath(fpath)
 
+def filter_(url):
+    fpath = "blacklist.txt"  # 改成你的blacklist.txt的路径
+    try:
+        with open(fpath, "r", encoding="utf8") as f:
+            blacklist = f.readlines()
+    except FileNotFoundError: 
+        with open(fpath, "w", encoding="utf8") as f:
+            pass
+        blacklist = []
+    for i in blacklist:
+        i = i.strip()
+        try:
+            j = re.compile(i)
+            if j.search(url):
+                return True
+        except re.error:
+            pass
+        finally:
+            # if i.index(url):
+            if i.find(url) > -1:
+                return True
+    return False
+
 # md5(str[, encoding]) or md5(bytes)
 def md5(*_str):
     if len(_str) > 0:
