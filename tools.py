@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import hashlib
 import re
 try:
     from requests_html import HTMLSession
@@ -143,6 +144,25 @@ def chapterNum(aForHtml):
                         num += int(re.search(r"\d", i)[0]) * (10**temp)
             aForHtml = re.sub(r"第[^0-9章节回(部分)]+([章节回(部分)])", "第"+str(num)+b, aForHtml)
     return aForHtml
+
+# md5(str[, encoding]) or md5(bytes)
+def md5(*_str):
+    if len(_str) > 0:
+        t = _str[0]
+        encode_type = "utf-8"
+        if len(_str) > 1:
+            encode_type = _str[1]
+        m = hashlib.md5()
+        if type(t) == str:
+            try:
+                t = t.encode(encode_type)
+            except LookupError:
+                t = t.encode("utf-8")
+        m.update(t)
+        return m.hexdigest()
+    else:
+        print("缺少参数！")
+        return False
 
 if __name__ == "__main__":
     pass
