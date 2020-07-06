@@ -185,14 +185,14 @@ def filter_(url):
         try:
             j = re.compile(i)
             if j.search(url):
-                return True
+                return ""
         except re.error:
             pass
         finally:
             # if i.index(url):
             if i.find(url) > -1:
-                return True
-    return False
+                return ""
+    return url
 
 # md5(str[, encoding]) or md5(bytes)
 def md5(*_str):
