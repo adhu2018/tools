@@ -193,7 +193,7 @@ def filter_(url):
             pass
         finally:
             # if i.index(url):
-            if i.find(url) > -1:
+            if url.find(i) > -1:
                 return ""
     return url
 
