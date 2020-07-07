@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import base64
+import chardet
 import hashlib
 import os
 import re
@@ -215,6 +217,20 @@ def md5(*_str):
     else:
         print("缺少参数！")
         return False
+
+# 迅雷链接还原
+def ThunderLinkRestore(thunder_link):
+    thunder_link = thunder_link[10:]
+    bytes_ = base64.b64decode(thunder_link)
+    try:
+        str_ = bytes_.decode(chardet.detect(bytes_)['encoding'])
+    except TypeError:
+        try:
+            str_ = bytes_.decode("utf8")
+        except UnicodeDecodeError:
+            str_ = bytes_.decode("gbk")
+    return str_
+
 
 if __name__ == "__main__":
     pass
