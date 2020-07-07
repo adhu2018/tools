@@ -29,8 +29,11 @@ def allow(*_str):
                 i = i[1]
                 for j in i:  # j ['Disallow', '.*?/s\\?.*']
                     reg = re.compile(j[1], re.I)
-                    if j[0].upper() == "DISALLOW" and reg.match(_url):
-                        b = False
+                    if reg.match(_url):  # fix 以第一个匹配到的为准。之前的写法是错的。
+                        if j[0].upper() == "DISALLOW":
+                            return False
+                        else:
+                            return True
     return b
 
 # 拼接链接，尝试http和https
