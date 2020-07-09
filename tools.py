@@ -194,7 +194,6 @@ def filter_(url):
         except re.error:
             pass
         finally:
-            # if i.index(url):
             if url.find(i) > -1:
                 return ""
     return url
