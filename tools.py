@@ -202,11 +202,13 @@ def filter_(url):
 def md5(*_str):
     if len(_str) > 0:
         t = _str[0]
+        if type(t) is not str:
+            t = str(t)
         encode_type = "utf-8"
         if len(_str) > 1:
             encode_type = _str[1]
         m = hashlib.md5()
-        if type(t) == str:
+        if type(t) is str:
             try:
                 t = t.encode(encode_type)
             except LookupError:
