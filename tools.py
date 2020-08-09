@@ -10,6 +10,8 @@ try:
 except ModuleNotFoundError:
     import requests as session
 
+############################################################
+# allow
 
 # allow([type, ]_url)
 def allow(*_str):
@@ -32,10 +34,7 @@ def allow(*_str):
                 for j in i:  # j ['Disallow', '.*?/s\\?.*']
                     reg = re.compile(j[1], re.I)
                     if reg.match(_url):  # fix 以第一个匹配到的为准。之前的写法是错的。
-                        if j[0].upper() == "DISALLOW":
-                            return False
-                        else:
-                            return True
+                        return False if j[0].upper() == "DISALLOW" else True
     return b
 
 # 拼接链接，尝试http和https
@@ -100,6 +99,9 @@ def robots_(url1):
         return list1
     else:
         return False
+
+# allow
+############################################################
 
 def chapterNum(aForHtml):
     num = 0
@@ -218,9 +220,55 @@ def md5(*_str):
         print("缺少参数！")
         return False
 
+# 动态加载模块 相当于在{path}路径下使用`import {_module}`
+def reload_module(_module, path=None, raise_=False):
+    """
+    试用阶段！！
+    
+    - 在系统环境路径列表`最前方`插入{path}
+    - 使用`importlib.import_module(".", _module)`导入模块
+    - 测试中，从`dir({_module})`的结果来看，相关的 类/函数 进行删减的时候是无法同步删减的，会保持原样
+    - `在sys.path各路径下存在模块名称冲突`
+      * 按照已知的常规导入模块方法，返回的结果是在sys.path中各个路径顺序找到的第一个(第一步的原因)
+      * 测试可行，应该也是这样的，不过毕竟样本过少，不能保证稳定性。。
+    - `importlib.reload(module_)`语句可以对模块进行热重载(即在代码运行的过程中进行重载，`即时生效`)
+    
+    - _module   需要导入的模块
+    - path      模块所在的路径，可选
+    - raise_    导入失败时是否报错，可选
+    """
+    if path:
+        import sys
+        sys_path_temp = list(sys.path)
+        sys.path.insert(0, path)
+    try:
+        import importlib
+        module_ = importlib.import_module(".", _module)
+        _module_ = importlib.reload(module_)
+        return _module_
+    except (ImportError, ModuleNotFoundError) as err:
+        if path:
+            sys.path = sys_path_temp
+        if raise_:
+            raise err
+        return None
+
+# 文本转语音，win10测试可行
+def text2Speech(text):
+    try:
+        import win32com.client
+        # Microsoft Speech API
+        speak = win32com.client.Dispatch("SAPI.SpVoice")
+        speak.Speak(text)
+    except (ImportError, ModuleNotFoundError) as err:
+        raise err
+
 # 迅雷链接还原
-def ThunderLinkRestore(thunder_link):
-    thunder_link = thunder_link[10:]
+def ThunderLinkRestore(thunder_link_):
+    thunder_link = thunder_link_[10:]
+    if len(thunder_link) == 0 or not thunder_link_.startswith("thunder_link"):
+        print("`{}`不是迅雷链接！".format(thunder_link_))
+        return None
     bytes_ = base64.b64decode(thunder_link)
     try:
         str_ = bytes_.decode(chardet.detect(bytes_)['encoding'])
