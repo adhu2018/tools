@@ -178,13 +178,13 @@ def download_(*_str):
     del r
     return os.path.abspath(fpath)
 
-def filter_(url):
-    fpath = "blacklist.txt"  # 改成你的blacklist.txt的路径
+def filter_(url, path="blacklist.txt"):
+    """filter_(url, path="blacklist.txt")  path默认值为blacklist.txt。url在文件(path)里匹配成功则返回值为空，否则原样返回url。"""
     try:
-        with open(fpath, "r", encoding="utf8") as f:
+        with open(path, "r", encoding="utf8") as f:
             blacklist = f.readlines()
     except FileNotFoundError: 
-        with open(fpath, "w", encoding="utf8") as f:
+        with open(path, "w", encoding="utf8") as f:
             pass
         blacklist = []
     for i in blacklist:
