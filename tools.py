@@ -14,7 +14,7 @@ except ModuleNotFoundError:
 # allow
 
 # allow([type, ]_url)
-def allow(*_str):
+def allow(*_str) -> bool:
     _url = ""
     type = "*"
     regcom = re.compile(r"https?(://[^/]*)", re.I)
@@ -103,7 +103,7 @@ def robots_(url1):
 # allow
 ############################################################
 
-def chapterNum(aForHtml):
+def chapterNum(aForHtml: str) -> str:
     num = 0
     temp = str(aForHtml)
     tempNum = re.search(r"第([^0-9章节回(部分)]+)([章节回(部分)])", temp)
@@ -178,7 +178,7 @@ def download_(*_str):
     del r
     return os.path.abspath(fpath)
 
-def filter_(url, path="blacklist.txt"):
+def filter_(url, path="blacklist.txt") -> str:
     """filter_(url, path="blacklist.txt")  path默认值为blacklist.txt。url在文件(path)里匹配成功则返回值为空，否则原样返回url。"""
     try:
         with open(path, "r", encoding="utf8") as f:
@@ -264,7 +264,7 @@ def text2Speech(text):
         raise err
 
 # 迅雷链接还原
-def ThunderLinkRestore(thunder_link_):
+def ThunderLinkRestore(thunder_link_: str):
     thunder_link = thunder_link_[10:]
     if len(thunder_link) == 0 or not thunder_link_.startswith("thunder_link"):
         print("`{}`不是迅雷链接！".format(thunder_link_))
