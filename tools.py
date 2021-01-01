@@ -170,12 +170,16 @@ def download_(*_str):
         fpath = _str[1] + md5(url) + type
     else:
         fpath = md5(url) + type
-    r = session.get(url)
-    if r.status_code == 200:
-        if not os.path.exists(fpath):
+    if len(_str) > 2:
+        new = _str[2]
+    else:
+        new = False
+    if new or not os.path.exists(fpath):
+        r = session.get(url)
+        if r.status_code == 200:
             with open(fpath, "wb+") as f:
                 f.write(r.content)
-    del r
+        del r
     return os.path.abspath(fpath)
 
 def filter_(url, path="blacklist.txt") -> str:
@@ -278,6 +282,34 @@ def ThunderLinkRestore(thunder_link_: str):
         except UnicodeDecodeError:
             str_ = bytes_.decode("gbk")
     return str_
+
+# tools.meiriyiwen().print()
+def meiriyiwen(fdir="./cache/", new=False):
+    """fdir: 缓存文件夹。new: 重新请求，默认优先使用已有缓存。"""
+    class SimpleArticle:
+        def __init__(self):
+            self.title = ""
+            self.author = ""
+            self.content = ""
+        
+        def print(self):
+            print("标题：{}\n\r作者：{}\n\r\n\r{}".format(self.title, self.author, self.content))
+    
+    article = SimpleArticle()
+    if not os.path.exists(fdir):
+        os.makedirs(fdir)
+    fpath = download_("https://meiriyiwen.com/", fdir, new)
+    with open(fpath, "r", encoding="utf8") as f:
+        html_ = f.read()
+        from lxml import etree
+        html_ = etree.HTML(html_)
+    article.title = html_.xpath("//h1")[0].text
+    article.author = html_.xpath("//p[@class='article_author']/span")[0].text
+    content_ = html_.xpath("//div[@class='article_text']//p")
+    for i in content_:
+        if i.text.strip():
+            article.content += "    " + i.text.strip() + "\n\r"
+    return article
 
 
 if __name__ == "__main__":
