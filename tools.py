@@ -292,8 +292,11 @@ def meiriyiwen(fdir="./cache/", new=False):
             self.author = ""
             self.content = ""
         
-        def print(self):
-            print("标题：{}\n\r作者：{}\n\r\n\r{}".format(self.title, self.author, self.content))
+        def print(self, _print=True):
+            result = "标题：{}\n\r作者：{}\n\r\n\r{}".format(self.title, self.author, self.content)
+            if _print:
+                print(result)
+            return result
     
     article = SimpleArticle()
     if not os.path.exists(fdir):
