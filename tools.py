@@ -344,12 +344,19 @@ def meiriyiwen(fdir="./cache/", new=False):
 ############################################################
 # sendmail
 
-def _sendmail(account, to, subject, content) -> bool:
+def _sendmail(account, from_name, to, subject, content) -> bool:
     # 需要的模块：email, smtplib。
     # The required module: email, smtplib.
     from email.mime.text import MIMEText
-    msg = MIMEText(content, "html", "utf-8")
-    msg["From"] = account["name"]
+    from email.utils import parseaddr,formataddr
+    from email.header import Header
+    
+    def _format_addr(s):
+        name,addr = parseaddr(s)
+        return formataddr((Header(name,"utf-8").encode(), addr if isinstance(addr,str) else addr))
+    
+    msg = MIMEText(content, "plain", "utf-8")
+    msg["From"] = _format_addr("{} <{}>".format(from_name, account["name"]))
     msg["To"] = to
     msg["Subject"] = subject
     
@@ -366,7 +373,7 @@ def _sendmail(account, to, subject, content) -> bool:
         return False
 
 def sendmail(username: str, password: str, smtp_host: str, smtp_port: int,
-    send_to: str, subject: str="主题", content="内容") -> bool:
+    from_name: str, send_to: str, subject: str="主题", content="内容") -> bool:
     # 需要的模块：re。
     # 不包含调用函数中使用的模块。
     # The required module: re.
@@ -382,7 +389,7 @@ def sendmail(username: str, password: str, smtp_host: str, smtp_port: int,
         print("err")
         return False
     else:
-        return _sendmail(account, send_to, subject, content)
+        return _sendmail(account, from_name, send_to, subject, content)
 
 # sendmail
 ############################################################
