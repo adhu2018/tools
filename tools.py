@@ -359,10 +359,10 @@ def _sendmail(account, to, content, subject) -> bool:
         em.login(account["name"], account["password"])
         em.sendmail(msg["From"], msg["To"], msg.as_string())
         em.quit()
-        print("发送成功！")
+        print("Success!")
         return True
     except Exception as err:
-        print("发送失败！\n{}".format(err))
+        print("Failed!\n{}".format(err))
         return False
 
 def sendmail(username: str, password: str, smtp_host: str, smtp_port: int,
