@@ -344,7 +344,7 @@ def meiriyiwen(fdir="./cache/", new=False):
 ############################################################
 # sendmail
 
-def _sendmail(account, to, content, subject) -> bool:
+def _sendmail(account, to, subject, content) -> bool:
     # 需要的模块：email, smtplib。
     # The required module: email, smtplib.
     from email.mime.text import MIMEText
