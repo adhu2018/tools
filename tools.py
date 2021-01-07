@@ -39,7 +39,6 @@ def allow(*_str) -> bool:
 
 # 拼接链接，尝试http和https
 def _robots(_url):
-    session = HTMLSession()
     url_com = re.search(r"https?(://[^/]*)", _url)[1]
     url1 = "http%s/robots.txt" % str(url_com)
     url2 = "https%s/robots.txt" % str(url_com)
