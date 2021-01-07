@@ -314,6 +314,46 @@ def meiriyiwen(fdir="./cache/", new=False):
             article.content += "    " + i.text.strip() + "\n\r"
     return article
 
+############################################################
+# sendmail
+
+def _sendmail(account, to, content, subject) -> bool:
+    from email.mime.text import MIMEText
+    msg = MIMEText(content, "html", "utf-8")
+    msg["From"] = account["name"]
+    msg["To"] = to
+    msg["Subject"] = subject
+    
+    import smtplib
+    try:
+        em = smtplib.SMTP_SSL(account["smtp_host"], account["smtp_port"])
+        em.login(account["name"], account["password"])
+        em.sendmail(msg["From"], msg["To"], msg.as_string())
+        em.quit()
+        print("发送成功！")
+        return True
+    except Exception as err:
+        print("发送失败！\n{}".format(err))
+        return False
+
+def sendmail(username: str, password: str, smtp_host: str, smtp_port: int,
+    send_to: str, subject: str="主题", content="内容") -> bool:
+    account = {}
+    account["name"] = username.strip()
+    account["password"] = password.strip()
+    account["smtp_host"] = smtp_host.strip()
+    import re
+    account["smtp_port"] = smtp_port if re.sub(r"[^\d]", r"", str(smtp_port)) == str(smtp_port) else 0
+    
+    if account["smtp_port"]==0:
+        print("err")
+        return False
+    else:
+        return _sendmail(account, send_to, subject, content)
+
+# sendmail
+############################################################
+
 
 if __name__ == "__main__":
     pass
