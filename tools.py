@@ -15,6 +15,10 @@ except ModuleNotFoundError:
 
 # allow([type, ]_url)
 def allow(*_str) -> bool:
+    # 需要的模块：re。
+    # 不包含调用函数中使用的模块。
+    # The required module: re.
+    # Does not contain the modules used in the calling function.
     _url = ""
     type = "*"
     regcom = re.compile(r"https?(://[^/]*)", re.I)
@@ -39,6 +43,10 @@ def allow(*_str) -> bool:
 
 # 拼接链接，尝试http和https
 def _robots(_url):
+    # 需要的模块：re。
+    # 不包含调用函数中使用的模块。
+    # The required module: re.
+    # Does not contain the modules used in the calling function.
     url_com = re.search(r"https?(://[^/]*)", _url)[1]
     url1 = "http%s/robots.txt" % str(url_com)
     url2 = "https%s/robots.txt" % str(url_com)
@@ -63,6 +71,8 @@ def robots_(url1):
         "$" 匹配行结束符。
         "*" 匹配0或多个任意字符
     """
+    # 需要的模块：re, requests_html/requests。
+    # The required module: re, requests_html/requests.
     try:
         r = session.get(url1)
     except:  # 尽量验证签名，（使用fiddler等）证书验证有问题时不验证签名。会有一个Warning，这样你就知道当前是没有验证签名的。也可以直接不验证签名，然后把Warning去掉，但不推荐。
@@ -103,6 +113,8 @@ def robots_(url1):
 ############################################################
 
 def chapterNum(aForHtml: str) -> str:
+    # 需要的模块：re。
+    # The required module: re.
     num = 0
     temp = str(aForHtml)
     tempNum = re.search(r"第([^0-9章节回(部分)]+)([章节回(部分)])", temp)
@@ -154,6 +166,8 @@ def chapterNum(aForHtml: str) -> str:
 
 # download_("http://www.baidu.com"[, path])
 def download_(*_str):
+    # 需要的模块：os, re, requests_html/requests。
+    # The required module: os, re, requests_html/requests.
     if len(_str) > 0:
         url = _str[0]
         type = re.sub(r".*//[^/]*", r"", url)
@@ -183,6 +197,8 @@ def download_(*_str):
 
 def filter_(url, path="blacklist.txt") -> str:
     """filter_(url, path="blacklist.txt")  path默认值为blacklist.txt。url在文件(path)里匹配成功则返回值为空，否则原样返回url。"""
+    # 需要的模块：re。
+    # The required module: re.
     try:
         with open(path, "r", encoding="utf8") as f:
             blacklist = f.readlines()
@@ -205,6 +221,8 @@ def filter_(url, path="blacklist.txt") -> str:
 
 # md5(str[, encoding]) or md5(bytes) or md5(int)
 def md5(*_str):
+    # 需要的模块：hashlib。
+    # The required module: hashlib.
     if len(_str) > 0:
         t = _str[0]
         if type(t) is not str:
@@ -240,6 +258,8 @@ def reload_module(_module, path=None, raise_=False):
     - path      模块所在的路径，可选
     - raise_    导入失败时是否报错，可选
     """
+    # 需要的模块：sys, importlib。
+    # The required module: sys, importlib.
     if path:
         import sys
         sys_path_temp = list(sys.path)
@@ -258,6 +278,8 @@ def reload_module(_module, path=None, raise_=False):
 
 # 文本转语音，win10测试可行
 def text2Speech(text):
+    # 需要的模块：win32com。
+    # The required module: win32com.
     try:
         import win32com.client
         # Microsoft Speech API
@@ -268,6 +290,8 @@ def text2Speech(text):
 
 # 迅雷链接还原
 def ThunderLinkRestore(thunder_link_: str):
+    # 需要的模块：base64, chardet。
+    # The required module: base64, chardet.
     thunder_link = thunder_link_[10:]
     if len(thunder_link) == 0 or not thunder_link_.startswith("thunder_link"):
         print("`{}`不是迅雷链接！".format(thunder_link_))
@@ -285,6 +309,10 @@ def ThunderLinkRestore(thunder_link_: str):
 # tools.meiriyiwen().print()
 def meiriyiwen(fdir="./cache/", new=False):
     """fdir: 缓存文件夹。new: 重新请求，默认优先使用已有缓存。"""
+    # 需要的模块：os, lxml。
+    # 不包含调用函数中使用的模块。
+    # The required module: os, lxml.
+    # Does not contain the modules used in the calling function.
     class SimpleArticle:
         def __init__(self):
             self.title = ""
@@ -317,6 +345,8 @@ def meiriyiwen(fdir="./cache/", new=False):
 # sendmail
 
 def _sendmail(account, to, content, subject) -> bool:
+    # 需要的模块：email, smtplib。
+    # The required module: email, smtplib.
     from email.mime.text import MIMEText
     msg = MIMEText(content, "html", "utf-8")
     msg["From"] = account["name"]
@@ -337,6 +367,10 @@ def _sendmail(account, to, content, subject) -> bool:
 
 def sendmail(username: str, password: str, smtp_host: str, smtp_port: int,
     send_to: str, subject: str="主题", content="内容") -> bool:
+    # 需要的模块：re。
+    # 不包含调用函数中使用的模块。
+    # The required module: re.
+    # Does not contain the modules used in the calling function.
     account = {}
     account["name"] = username.strip()
     account["password"] = password.strip()
