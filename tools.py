@@ -164,8 +164,8 @@ def chapterNum(aForHtml: str) -> str:
             aForHtml = re.sub(r"第[^0-9章节回(部分)]+([章节回(部分)])", "第"+str(num)+b, aForHtml)
     return aForHtml
 
-# download_("http://www.baidu.com"[, path])
-def download_(*_str):
+# download("http://www.baidu.com"[, path])
+def download(*_str):
     # 需要的模块：os, re, requests_html/requests。
     # The required module: os, re, requests_html/requests.
     if len(_str) > 0:
@@ -195,8 +195,8 @@ def download_(*_str):
         del r
     return os.path.abspath(fpath)
 
-def filter_(url, path="blacklist.txt") -> str:
-    """filter_(url, path="blacklist.txt")  path默认值为blacklist.txt。url在文件(path)里匹配成功则返回值为空，否则原样返回url。"""
+def filter(url, path="blacklist.txt") -> str:
+    """filter(url, path="blacklist.txt")  path默认值为blacklist.txt。url在文件(path)里匹配成功则返回值为空，否则原样返回url。"""
     # 需要的模块：re。
     # The required module: re.
     try:
@@ -242,7 +242,7 @@ def md5(*_str):
         return False
 
 # 动态加载模块 相当于在{path}路径下使用`import {_module}`
-def reload_module(_module, path=None, raise_=False):
+def reload(_module, path=None, raise_=False):
     """
     试用阶段！！
     
@@ -289,7 +289,7 @@ def text2Speech(text):
         raise err
 
 # 迅雷链接还原
-def ThunderLinkRestore(thunder_link_: str):
+def thunderLinkRestore(thunder_link_: str):
     # 需要的模块：base64, chardet。
     # The required module: base64, chardet.
     thunder_link = thunder_link_[10:]
@@ -328,7 +328,7 @@ def meiriyiwen(fdir="./cache/", new=False):
     article = SimpleArticle()
     if not os.path.exists(fdir):
         os.makedirs(fdir)
-    fpath = download_("https://meiriyiwen.com/", fdir, new)
+    fpath = download("https://meiriyiwen.com/", fdir, new)
     with open(fpath, "r", encoding="utf8") as f:
         html_ = f.read()
         from lxml import etree
