@@ -4,7 +4,6 @@ import chardet
 import hashlib
 import os
 import re
-import win32clipboard
 try:
     import win32clipboard
     _win32clipboard = True
