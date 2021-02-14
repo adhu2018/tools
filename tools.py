@@ -250,6 +250,11 @@ def md5(*_str):
         print("缺少参数！")
         return False
 
+def qqdlLinkGenerator(link_: str):
+    # 需要的模块：base64。
+    # The required module: base64.
+    return "qqdl://" + str(base64.b64encode(link_.encode("utf-8")))[2:-1]
+
 def qqdlLinkRestore(link_: str):
     # 需要的模块：base64, chardet。
     # The required module: base64, chardet.
