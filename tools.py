@@ -250,6 +250,23 @@ def md5(*_str):
         print("缺少参数！")
         return False
 
+def qqdlLinkRestore(link_: str):
+    # 需要的模块：base64, chardet。
+    # The required module: base64, chardet.
+    link = link_[7:]
+    if len(link) == 0 or not link_.startswith("qqdl://"):
+        print("`{}`不是QQ旋风链接！".format(link_))
+        return None
+    bytes_ = base64.b64decode(link)
+    try:
+        str_ = bytes_.decode(chardet.detect(bytes_)['encoding'])
+    except TypeError:
+        try:
+            str_ = bytes_.decode("utf8")
+        except UnicodeDecodeError:
+            str_ = bytes_.decode("gbk")
+    return str_
+
 # 动态加载模块 相当于在{path}路径下使用`import {_module}`
 def reload(_module, path=None, raise_=False):
     """
