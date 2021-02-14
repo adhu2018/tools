@@ -379,14 +379,6 @@ def reload(_module, path=None, raise_=False):
             raise err
         return None
 
-def setClipboardData(data: str=""):
-    # 需要的模块：win32clipboard。
-    # The required module: win32clipboard.
-    win32clipboard.OpenClipboard()
-    win32clipboard.EmptyClipboard()
-    win32clipboard.SetClipboardText(data)
-    win32clipboard.CloseClipboard()
-
 # 文本转语音，win10测试可行
 def text2Speech(text):
     # 需要的模块：win32com。
@@ -474,6 +466,14 @@ def sendmail(username: str, password: str, smtp_host: str, smtp_port: int,
 
 # sendmail
 ############################################################
+
+def setClipboardData(data: str=""):
+    # 需要的模块：win32clipboard。
+    # The required module: win32clipboard.
+    win32clipboard.OpenClipboard()
+    win32clipboard.EmptyClipboard()
+    win32clipboard.SetClipboardText(data)
+    win32clipboard.CloseClipboard()
 
 
 if __name__ == "__main__":
