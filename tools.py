@@ -293,7 +293,7 @@ def thunderLinkRestore(thunder_link_: str):
     # 需要的模块：base64, chardet。
     # The required module: base64, chardet.
     thunder_link = thunder_link_[10:]
-    if len(thunder_link) == 0 or not thunder_link_.startswith("thunder_link"):
+    if len(thunder_link) == 0 or not thunder_link_.startswith("thunder://"):
         print("`{}`不是迅雷链接！".format(thunder_link_))
         return None
     bytes_ = base64.b64decode(thunder_link)
@@ -304,7 +304,7 @@ def thunderLinkRestore(thunder_link_: str):
             str_ = bytes_.decode("utf8")
         except UnicodeDecodeError:
             str_ = bytes_.decode("gbk")
-    return str_
+    return str_[2:-2]
 
 # tools.meiriyiwen().print()
 def meiriyiwen(fdir="./cache/", new=False):
