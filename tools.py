@@ -379,18 +379,6 @@ def reload(_module, path=None, raise_=False):
             raise err
         return None
 
-# 文本转语音，win10测试可行
-def text2Speech(text):
-    # 需要的模块：win32com。
-    # The required module: win32com.
-    try:
-        import win32com.client
-        # Microsoft Speech API
-        speak = win32com.client.Dispatch("SAPI.SpVoice")
-        speak.Speak(text)
-    except (ImportError, ModuleNotFoundError) as err:
-        raise err
-
 def thunderLinkGenerator(link_: str):
     # 需要的模块：base64。
     # The required module: base64.
@@ -474,6 +462,18 @@ def setClipboardData(data: str=""):
     win32clipboard.EmptyClipboard()
     win32clipboard.SetClipboardText(data)
     win32clipboard.CloseClipboard()
+
+# 文本转语音，win10测试可行
+def text2Speech(text):
+    # 需要的模块：win32com。
+    # The required module: win32com.
+    try:
+        import win32com.client
+        # Microsoft Speech API
+        speak = win32com.client.Dispatch("SAPI.SpVoice")
+        speak.Speak(text)
+    except (ImportError, ModuleNotFoundError) as err:
+        raise err
 
 
 if __name__ == "__main__":
