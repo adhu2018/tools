@@ -220,6 +220,11 @@ def filter(url, path="blacklist.txt") -> str:
                 return ""
     return url
 
+def flashgetLinkGenerator(link_: str):
+    # 需要的模块：base64。
+    # The required module: base64.
+    return "flashget://" + str(base64.b64encode(f"[FLASHGET]{link_}[FLASHGET]".encode("utf-8")))[2:-1]
+
 def flashgetLinkRestore(link_: str):
     # 需要的模块：base64, chardet。
     # The required module: base64, chardet.
