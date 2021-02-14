@@ -379,11 +379,6 @@ def reload(_module, path=None, raise_=False):
             raise err
         return None
 
-def thunderLinkGenerator(link_: str):
-    # 需要的模块：base64。
-    # The required module: base64.
-    return "thunder://" + str(base64.b64encode(f"AA{link_}ZZ".encode("utf-8")))[2:-1]
-
 # 迅雷链接还原
 def thunderLinkRestore(thunder_link_: str):
     # 需要的模块：base64, chardet。
@@ -474,6 +469,11 @@ def text2Speech(text):
         speak.Speak(text)
     except (ImportError, ModuleNotFoundError) as err:
         raise err
+
+def thunderLinkGenerator(link_: str):
+    # 需要的模块：base64。
+    # The required module: base64.
+    return "thunder://" + str(base64.b64encode(f"AA{link_}ZZ".encode("utf-8")))[2:-1]
 
 
 if __name__ == "__main__":
