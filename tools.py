@@ -4,6 +4,7 @@ import chardet
 import hashlib
 import os
 import re
+import win32clipboard
 try:
     from requests_html import HTMLSession
     session = HTMLSession()
@@ -218,6 +219,14 @@ def filter(url, path="blacklist.txt") -> str:
             if url.find(i) > -1:
                 return ""
     return url
+
+def getClipboardData():
+    # 需要的模块：win32clipboard。
+    # The required module: win32clipboard.
+    win32clipboard.OpenClipboard()
+    data = win32clipboard.GetClipboardData()
+    win32clipboard.CloseClipboard()
+    return data
 
 # md5(str[, encoding]) or md5(bytes) or md5(int)
 def md5(*_str):
