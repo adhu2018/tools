@@ -458,14 +458,14 @@ def thunderLinkGenerator(link_: str):
     return "thunder://" + str(base64.b64encode(f"AA{link_}ZZ".encode("utf-8")))[2:-1]
 
 # 迅雷链接还原
-def thunderLinkRestore(thunder_link_: str):
+def thunderLinkRestore(link_: str):
     # 需要的模块：base64, chardet。
     # The required module: base64, chardet.
-    thunder_link = thunder_link_[10:]
-    if len(thunder_link) == 0 or not thunder_link_.startswith("thunder://"):
-        print("`{}`不是迅雷链接！".format(thunder_link_))
+    link = link_[10:]
+    if len(link) == 0 or not link_.startswith("thunder://"):
+        print("`{}`不是迅雷链接！".format(link_))
         return None
-    bytes_ = base64.b64decode(thunder_link)
+    bytes_ = base64.b64decode(link)
     try:
         str_ = bytes_.decode(chardet.detect(bytes_)['encoding'])
     except TypeError:
