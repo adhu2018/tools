@@ -245,6 +245,10 @@ def flashgetLinkRestore(link_: str):
 def getClipboardData():
     # 需要的模块：win32clipboard。
     # The required module: win32clipboard.
+    try:
+        win32clipboard.CloseClipboard()  # 解决进程异常结束时可能存在的问题
+    except:
+        pass
     win32clipboard.OpenClipboard()
     data = win32clipboard.GetClipboardData()
     win32clipboard.CloseClipboard()
@@ -435,6 +439,10 @@ def sendmail(username: str, password: str, smtp_host: str, smtp_port: int,
 def setClipboardData(data: str=""):
     # 需要的模块：win32clipboard。
     # The required module: win32clipboard.
+    try:
+        win32clipboard.CloseClipboard()  # 解决进程异常结束时可能存在的问题
+    except:
+        pass
     win32clipboard.OpenClipboard()
     win32clipboard.EmptyClipboard()
     win32clipboard.SetClipboardText(data)
