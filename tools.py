@@ -287,6 +287,41 @@ def md5(*_str):
         print("缺少参数！")
         return False
 
+# tools.meiriyiwen().print()
+def meiriyiwen(fdir="./cache/", new=False):
+    """fdir: 缓存文件夹。new: 重新请求，默认优先使用已有缓存。"""
+    # 需要的模块：os, lxml。
+    # 不包含调用函数中使用的模块。
+    # The required module: os, lxml.
+    # Does not contain the modules used in the calling function.
+    class SimpleArticle:
+        def __init__(self):
+            self.title = ""
+            self.author = ""
+            self.content = ""
+        
+        def print(self, _print=True):
+            result = "标题：{}\n\r作者：{}\n\r\n\r{}".format(self.title, self.author, self.content)
+            if _print:
+                print(result)
+            return result
+    
+    article = SimpleArticle()
+    if not os.path.exists(fdir):
+        os.makedirs(fdir)
+    fpath = download("https://meiriyiwen.com/", fdir, new)
+    with open(fpath, "r", encoding="utf8") as f:
+        html_ = f.read()
+        from lxml import etree
+        html_ = etree.HTML(html_)
+    article.title = html_.xpath("//h1")[0].text
+    article.author = html_.xpath("//p[@class='article_author']/span")[0].text
+    content_ = html_.xpath("//div[@class='article_text']//p")
+    for i in content_:
+        if i.text.strip():
+            article.content += "    " + i.text.strip() + "\n\r"
+    return article
+
 def qqdlLinkGenerator(link_: str):
     # 需要的模块：base64。
     # The required module: base64.
@@ -386,41 +421,6 @@ def thunderLinkRestore(thunder_link_: str):
         except UnicodeDecodeError:
             str_ = bytes_.decode("gbk")
     return str_[2:-2]
-
-# tools.meiriyiwen().print()
-def meiriyiwen(fdir="./cache/", new=False):
-    """fdir: 缓存文件夹。new: 重新请求，默认优先使用已有缓存。"""
-    # 需要的模块：os, lxml。
-    # 不包含调用函数中使用的模块。
-    # The required module: os, lxml.
-    # Does not contain the modules used in the calling function.
-    class SimpleArticle:
-        def __init__(self):
-            self.title = ""
-            self.author = ""
-            self.content = ""
-        
-        def print(self, _print=True):
-            result = "标题：{}\n\r作者：{}\n\r\n\r{}".format(self.title, self.author, self.content)
-            if _print:
-                print(result)
-            return result
-    
-    article = SimpleArticle()
-    if not os.path.exists(fdir):
-        os.makedirs(fdir)
-    fpath = download("https://meiriyiwen.com/", fdir, new)
-    with open(fpath, "r", encoding="utf8") as f:
-        html_ = f.read()
-        from lxml import etree
-        html_ = etree.HTML(html_)
-    article.title = html_.xpath("//h1")[0].text
-    article.author = html_.xpath("//p[@class='article_author']/span")[0].text
-    content_ = html_.xpath("//div[@class='article_text']//p")
-    for i in content_:
-        if i.text.strip():
-            article.content += "    " + i.text.strip() + "\n\r"
-    return article
 
 ############################################################
 # sendmail
