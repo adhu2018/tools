@@ -39,7 +39,7 @@
   1. 下载 `md5.py` 
   2. 
       ```python
-      import md5
+      from md5 import md5
 
       print(md5(1))  # c4ca4238a0b923820dcc509a6f75849b
       print(md5("1"))  # c4ca4238a0b923820dcc509a6f75849b
