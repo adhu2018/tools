@@ -4,7 +4,7 @@ import importlib
 __temp = ["allow", "chapterNum", "download", "filter", "flashgetLinkGenerator",
         "flashgetLinkRestore", "getClipboardData", "linkConverter", "md5", "meiriyiwen",
         "qqdlLinkGenerator", "qqdlLinkRestore", "reload", "sendmail", "setClipboardData",
-        "text2Speech", "thunderLinkRestore"]
+        "text2Speech", "thunderLinkGenerator", "thunderLinkRestore"]
 for i in __temp:
     importlib.import_module(".{}".format(i), "tools")
     exec("from .{m} import {m}".format(m=i))
