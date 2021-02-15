@@ -9,7 +9,7 @@ except ModuleNotFoundError:
 try:
     from .md5 import md5
 except ImportError:
-    import md5
+    from md5 import md5
 
 # download("http://www.baidu.com"[, path])
 def download(*_str):

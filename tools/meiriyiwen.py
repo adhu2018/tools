@@ -4,7 +4,7 @@ from lxml import etree
 try:
     from .download import download
 except ImportError:
-    import download
+    from download import download
 
 # tools.meiriyiwen().print()
 def meiriyiwen(fdir="./cache/", new=False):
