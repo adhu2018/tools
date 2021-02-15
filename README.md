@@ -1,5 +1,31 @@
 # tools
 
+- `tools`
+  - `allow`
+    - `_robots
+    - `robots_`
+  - `chapterNum`
+  - `download`
+  - `filter`
+  - `flashgetLinkGenerator`
+  - `flashgetLinkRestore`
+  - `getClipboardData`
+  - `linkConverter`
+  - `md5`
+  - `meiriyiwen`
+    - `SimpleArticle`
+  - `qqdlLinkGenerator`
+  - `qqdlLinkRestore`
+  - `reload`
+  - `sendmail`
+    - `_sendmail`
+      - `_format_addr`
+  - `setClipboardData`
+  - `text2Speech`
+  - `thunderLinkGenerator`
+  - `thunderLinkRestore`
+  - `...`
+
 - 支持了直接 `import tools` 的使用方法。例如：
 
   ```python
