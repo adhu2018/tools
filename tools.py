@@ -321,15 +321,18 @@ def meiriyiwen(fdir="./cache/", new=False):
         os.makedirs(fdir)
     fpath = download("https://meiriyiwen.com/", fdir, new)
     with open(fpath, "r", encoding="utf8") as f:
-        html_ = f.read()
+        _html = f.read()
         from lxml import etree
-        html_ = etree.HTML(html_)
+        html_ = etree.HTML(_html)
     article.title = html_.xpath("//h1")[0].text
     article.author = html_.xpath("//p[@class='article_author']/span")[0].text
     content_ = html_.xpath("//div[@class='article_text']//p")
     for i in content_:
-        if i.text.strip():
-            article.content += "    " + i.text.strip() + "\n\r"
+        try:
+            if i.text.strip():
+                article.content += "    " + i.text.strip() + "\n\r"
+        except Exception as err:  # todo 等待下一次报错，获取网页源码
+            return err + "\n\r\n\r" + str(_html)
     return article
 
 def qqdlLinkGenerator(link_: str):
