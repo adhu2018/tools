@@ -18,27 +18,27 @@ except ModuleNotFoundError:
 ############################################################
 # allow
 
-# allow([type, ]_url)
+# allow([_type, ]_url)
 def allow(*_str) -> bool:
     # 需要的模块：re。
     # 不包含调用函数中使用的模块。
     # The required module: re.
     # Does not contain the modules used in the calling function.
     _url = ""
-    type = "*"
+    _type = "*"
     regcom = re.compile(r"https?(://[^/]*)", re.I)
     while _url == "":
         for i in _str:
             if regcom.search(i):
                 _url = i
             else:
-                type = i.upper()
+                _type = i.upper()
     _list = _robots(_url)
     b = True  # 默认允许爬取
     if _list:
         for i in _list:
             # 爬虫名称或种类
-            if i[0] == type or i[0] == "*":
+            if i[0] == _type or i[0] == "*":
                 i = i[1]
                 for j in i:  # j ['Disallow', '.*?/s\\?.*']
                     reg = re.compile(j[1], re.I)
@@ -175,19 +175,19 @@ def download(*_str):
     # The required module: os, re, requests_html/requests.
     if len(_str) > 0:
         url = _str[0]
-        type = re.sub(r".*//[^/]*", r"", url)
-        type = re.sub(r"[@\?].*", r"", type)
-        type = re.sub(r".*/", r"", type)
+        _type = re.sub(r".*//[^/]*", r"", url)
+        _type = re.sub(r"[@\?].*", r"", _type)
+        _type = re.sub(r".*/", r"", _type)
         try:
-            type = re.match(r".*?(\.[^\.]*)$",type)[1]
+            _type = re.match(r".*?(\.[^\.]*)$", _type)[1]
         except:
-            type = ""
+            _type = ""
     else:
         return False
     if len(_str) > 1:
-        fpath = _str[1] + md5(url) + type
+        fpath = _str[1] + md5(url) + _type
     else:
-        fpath = md5(url) + type
+        fpath = md5(url) + _type
     if len(_str) > 2:
         new = _str[2]
     else:
