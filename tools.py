@@ -224,7 +224,7 @@ def filter(url, path="blacklist.txt") -> str:
                 return ""
     return url
 
-def flashgetLinkGenerator(link_: str):
+def flashgetLinkGenerator(link_: str) -> str:
     # 需要的模块：base64。
     # The required module: base64.
     return "flashget://" + str(base64.b64encode(f"[FLASHGET]{link_}[FLASHGET]".encode("utf-8")))[2:-1]
@@ -260,7 +260,20 @@ def getClipboardData():
     win32clipboard.CloseClipboard()
     return data
 
-def linkConverter(link_):
+def getIP(_url):
+    domain = len(re.findall(r"\.", _url))
+    if domain<1:
+        return False
+    if domain==1:
+        r = session.get("https://{}.ipaddress.com".format(_url))
+    else:
+        domain = re.search(r"[^\.]+\.[^\.]+$", _url)[0]
+        r = session.get("https://{}.ipaddress.com/{}".format(domain, _url))
+    ip = re.findall("""https://www.ipaddress.com/ipv4/([\d\.]+)""", r.text)
+    ip = list(set(ip))
+    return ip if ip else False
+
+def linkConverter(link_) -> dict:
     linkList = {}
     if link_.startswith("flashget://"):
         linkList["real"] = flashgetLinkRestore(link_)
@@ -335,7 +348,7 @@ def meiriyiwen(fdir="./cache/", new=False):
             return err + "\n\r\n\r" + str(_html)
     return article
 
-def qqdlLinkGenerator(link_: str):
+def qqdlLinkGenerator(link_: str) -> str:
     # 需要的模块：base64。
     # The required module: base64.
     return "qqdl://" + str(base64.b64encode(link_.encode("utf-8")))[2:-1]
@@ -445,7 +458,7 @@ def sendmail(username: str, password: str, smtp_host: str, smtp_port: int,
 # sendmail
 ############################################################
 
-def setClipboardData(data: str=""):
+def setClipboardData(data: str="") -> None:
     # 需要的模块：win32clipboard。
     # The required module: win32clipboard.
     if not _win32clipboard:
@@ -460,7 +473,7 @@ def setClipboardData(data: str=""):
     win32clipboard.CloseClipboard()
 
 # 文本转语音，win10测试可行
-def text2Speech(text):
+def text2Speech(text) -> None:
     # 需要的模块：win32com。
     # The required module: win32com.
     try:
@@ -471,7 +484,7 @@ def text2Speech(text):
     except (ImportError, ModuleNotFoundError) as err:
         raise err
 
-def thunderLinkGenerator(link_: str):
+def thunderLinkGenerator(link_: str) -> str:
     # 需要的模块：base64。
     # The required module: base64.
     return "thunder://" + str(base64.b64encode(f"AA{link_}ZZ".encode("utf-8")))[2:-1]
