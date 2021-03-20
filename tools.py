@@ -398,7 +398,7 @@ def reload(_module, path=None, raise_=False):
         module_ = importlib.import_module(".", _module)
         _module_ = importlib.reload(module_)
         return _module_
-    except (ImportError, ModuleNotFoundError) as err:
+    except ImportError as err:
         if path:
             sys.path = sys_path_temp
         if raise_:
@@ -474,15 +474,21 @@ def setClipboardData(data: str="") -> None:
 
 # 文本转语音，win10测试可行
 def text2Speech(text) -> None:
-    # 需要的模块：win32com。
-    # The required module: win32com.
     try:
         import win32com.client
         # Microsoft Speech API
         speak = win32com.client.Dispatch("SAPI.SpVoice")
         speak.Speak(text)
-    except (ImportError, ModuleNotFoundError) as err:
-        raise err
+    except ImportError:
+        try:
+            import speech
+            """
+            这个的python3版本有问题，需要稍微改一下；
+            还有语音识别的接口，不过在我这电脑上不知道为什么用不了。
+            """
+            speech.say(text)
+        except ImportError as err:
+            raise err
 
 def thunderLinkGenerator(link_: str) -> str:
     # 需要的模块：base64。
