@@ -169,6 +169,45 @@ def chapterNum(aForHtml: str) -> str:
             aForHtml = re.sub(r"第[^0-9章节回(部分)]+([章节回(部分)])", "第"+str(num)+b, aForHtml)
     return aForHtml
 
+class Clipboard():
+    @property
+    def data(self):
+        # Clipboard().data
+        return self.getData()
+    
+    @data.setter
+    def data(self, value):
+        # Clipboard().data = "xxx"
+        self.setData(value)
+    
+    @staticmethod
+    def getData():
+        # Clipboard.getData()
+        if not _win32clipboard:
+            raise Exception("Please install the `win32clipboard` module.")
+        try:
+            win32clipboard.CloseClipboard()  # 解决进程异常结束时可能存在的问题
+        except:
+            pass
+        win32clipboard.OpenClipboard()
+        data = win32clipboard.GetClipboardData()
+        win32clipboard.CloseClipboard()
+        return data
+
+    @staticmethod
+    def setData(data: str="") -> None:
+        # Clipboard.setData()
+        if not _win32clipboard:
+            raise Exception("Please install the `win32clipboard` module.")
+        try:
+            win32clipboard.CloseClipboard()  # 解决进程异常结束时可能存在的问题
+        except:
+            pass
+        win32clipboard.OpenClipboard()
+        win32clipboard.EmptyClipboard()
+        win32clipboard.SetClipboardText(data)
+        win32clipboard.CloseClipboard()
+
 # download("http://www.baidu.com"[, path])
 def download(*_str):
     # 需要的模块：os, re, requests_html/requests。
@@ -245,20 +284,6 @@ def flashgetLinkRestore(link_: str):
         except UnicodeDecodeError:
             str_ = bytes_.decode("gbk")
     return str_[10:-10]
-
-def getClipboardData():
-    # 需要的模块：win32clipboard。
-    # The required module: win32clipboard.
-    if not _win32clipboard:
-        raise Exception("Please install the `win32clipboard` module.")
-    try:
-        win32clipboard.CloseClipboard()  # 解决进程异常结束时可能存在的问题
-    except:
-        pass
-    win32clipboard.OpenClipboard()
-    data = win32clipboard.GetClipboardData()
-    win32clipboard.CloseClipboard()
-    return data
 
 def getIP(_url):
     domain = len(re.findall(r"\.", _url))
@@ -457,20 +482,6 @@ def sendmail(username: str, password: str, smtp_host: str, smtp_port: int,
 
 # sendmail
 ############################################################
-
-def setClipboardData(data: str="") -> None:
-    # 需要的模块：win32clipboard。
-    # The required module: win32clipboard.
-    if not _win32clipboard:
-        raise Exception("Please install the `win32clipboard` module.")
-    try:
-        win32clipboard.CloseClipboard()  # 解决进程异常结束时可能存在的问题
-    except:
-        pass
-    win32clipboard.OpenClipboard()
-    win32clipboard.EmptyClipboard()
-    win32clipboard.SetClipboardText(data)
-    win32clipboard.CloseClipboard()
 
 # 文本转语音，win10测试可行
 def text2Speech(text) -> None:
