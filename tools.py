@@ -9,9 +9,8 @@ import os
 import re
 try:
     import win32clipboard
-    _win32clipboard = True
-except ModuleNotFoundError:
-    _win32clipboard = False
+except ImportError:
+    win32clipboard = None
 try:
     from requests_html import HTMLSession
     session = HTMLSession()
@@ -185,8 +184,7 @@ class Clipboard():
     @staticmethod
     def getData():
         # Clipboard.getData()
-        if not _win32clipboard:
-            raise Exception("Please install the `win32clipboard` module.")
+        assert win32clipboard, "Please install the `win32clipboard` module."
         try:
             win32clipboard.CloseClipboard()  # 解决进程异常结束时可能存在的问题
         except:
@@ -199,8 +197,7 @@ class Clipboard():
     @staticmethod
     def setData(data: str="") -> None:
         # Clipboard.setData()
-        if not _win32clipboard:
-            raise Exception("Please install the `win32clipboard` module.")
+        assert win32clipboard, "Please install the `win32clipboard` module."
         try:
             win32clipboard.CloseClipboard()  # 解决进程异常结束时可能存在的问题
         except:
