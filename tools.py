@@ -5,8 +5,14 @@ try:
 except ImportError:
     chardet = None
 import hashlib
+import importlib
 import os
 import re
+import smtplib
+import sys
+from email.mime.text import MIMEText
+from email.utils import parseaddr,formataddr
+from email.header import Header
 try:
     import win32clipboard
 except ImportError:
@@ -388,11 +394,9 @@ def reload(_module, path=None, raise_=False):
     - raise_    导入失败时是否报错，可选
     """
     if path:
-        import sys
         sys_path_temp = list(sys.path)
         sys.path.insert(0, path)
     try:
-        import importlib
         module_ = importlib.import_module(".", _module)
         _module_ = importlib.reload(module_)
         return _module_
@@ -407,9 +411,6 @@ def reload(_module, path=None, raise_=False):
 # sendmail
 
 def _sendmail(account, from_name, to, subject, content) -> bool:
-    from email.mime.text import MIMEText
-    from email.utils import parseaddr,formataddr
-    from email.header import Header
     
     def _format_addr(s):
         name,addr = parseaddr(s)
@@ -420,7 +421,6 @@ def _sendmail(account, from_name, to, subject, content) -> bool:
     msg["To"] = to
     msg["Subject"] = subject
     
-    import smtplib
     try:
         em = smtplib.SMTP_SSL(account["smtp_host"], account["smtp_port"])
         em.login(account["name"], account["password"])
@@ -438,7 +438,6 @@ def sendmail(username: str, password: str, smtp_host: str, smtp_port: int,
     account["name"] = username.strip()
     account["password"] = password.strip()
     account["smtp_host"] = smtp_host.strip()
-    import re
     account["smtp_port"] = smtp_port if re.sub(r"[^\d]", r"", str(smtp_port)) == str(smtp_port) else 0
     
     if account["smtp_port"]==0:
