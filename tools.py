@@ -14,8 +14,11 @@ except ImportError:
 try:
     from requests_html import HTMLSession
     session = HTMLSession()
-except ModuleNotFoundError:
-    import requests as session
+except ImportError:
+    try:
+        import requests as session
+    except ImportError:
+        session = None
 
 
 def _restore(link) -> str:
@@ -83,6 +86,7 @@ def robots_(url1):
         "$" 匹配行结束符。
         "*" 匹配0或多个任意字符
     """
+    assert session, "Please install the `requests_html` or `requests` module."
     try:
         r = session.get(url1)
     except:  # 尽量验证签名，（使用fiddler等）证书验证有问题时不验证签名。会有一个Warning，这样你就知道当前是没有验证签名的。也可以直接不验证签名，然后把Warning去掉，但不推荐。
@@ -229,6 +233,7 @@ def download(*_str):
     else:
         new = False
     if new or not os.path.exists(fpath):
+        assert session, "Please install the `requests_html` or `requests` module."
         r = session.get(url)
         if r.status_code == 200:
             with open(fpath, "wb+") as f:
@@ -272,6 +277,7 @@ def getIP(_url):
     domain = len(re.findall(r"\.", _url))
     if domain<1:
         return False
+    assert session, "Please install the `requests_html` or `requests` module."
     if domain==1:
         r = session.get("https://{}.ipaddress.com".format(_url))
     else:
