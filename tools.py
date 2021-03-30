@@ -33,8 +33,8 @@ except ImportError:
 
 def _restore(link) -> str:
     bytes_ = base64.b64decode(link)
+    assert chardet, "Please install the `chardet` module."
     try:
-        assert chardet, "Please install the `chardet` module."
         str_ = bytes_.decode(chardet.detect(bytes_)["encoding"])
     except (TypeError, AssertionError):
         try:
