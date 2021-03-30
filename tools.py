@@ -20,10 +20,6 @@ except ModuleNotFoundError:
 
 # allow([_type, ]_url)
 def allow(*_str) -> bool:
-    # 需要的模块：re。
-    # 不包含调用函数中使用的模块。
-    # The required module: re.
-    # Does not contain the modules used in the calling function.
     _url = ""
     _type = "*"
     regcom = re.compile(r"https?(://[^/]*)", re.I)
@@ -48,10 +44,6 @@ def allow(*_str) -> bool:
 
 # 拼接链接，尝试http和https
 def _robots(_url):
-    # 需要的模块：re。
-    # 不包含调用函数中使用的模块。
-    # The required module: re.
-    # Does not contain the modules used in the calling function.
     url_com = re.search(r"https?(://[^/]*)", _url)[1]
     url1 = "http%s/robots.txt" % str(url_com)
     url2 = "https%s/robots.txt" % str(url_com)
@@ -76,8 +68,6 @@ def robots_(url1):
         "$" 匹配行结束符。
         "*" 匹配0或多个任意字符
     """
-    # 需要的模块：re, requests_html/requests。
-    # The required module: re, requests_html/requests.
     try:
         r = session.get(url1)
     except:  # 尽量验证签名，（使用fiddler等）证书验证有问题时不验证签名。会有一个Warning，这样你就知道当前是没有验证签名的。也可以直接不验证签名，然后把Warning去掉，但不推荐。
@@ -116,8 +106,6 @@ def robots_(url1):
 ############################################################
 
 def chapterNum(aForHtml: str) -> str:
-    # 需要的模块：re。
-    # The required module: re.
     num = 0
     temp = str(aForHtml)
     tempNum = re.search(r"第([^0-9章节回(部分)]+)([章节回(部分)])", temp)
@@ -208,8 +196,6 @@ class Clipboard():
 
 # download("http://www.baidu.com"[, path])
 def download(*_str):
-    # 需要的模块：os, re, requests_html/requests。
-    # The required module: os, re, requests_html/requests.
     if len(_str) > 0:
         url = _str[0]
         _type = re.sub(r".*//[^/]*", r"", url)
@@ -239,8 +225,6 @@ def download(*_str):
 
 def filter(url, path="blacklist.txt") -> str:
     """filter(url, path="blacklist.txt")  path默认值为blacklist.txt。url在文件(path)里匹配成功则返回值为空，否则原样返回url。"""
-    # 需要的模块：re。
-    # The required module: re.
     try:
         with open(path, "r", encoding="utf8") as f:
             blacklist = f.readlines()
@@ -262,13 +246,9 @@ def filter(url, path="blacklist.txt") -> str:
     return url
 
 def flashgetLinkGenerator(link_: str) -> str:
-    # 需要的模块：base64。
-    # The required module: base64.
     return "flashget://" + str(base64.b64encode(f"[FLASHGET]{link_}[FLASHGET]".encode("utf-8")))[2:-1]
 
 def flashgetLinkRestore(link_: str):
-    # 需要的模块：base64, chardet。
-    # The required module: base64, chardet.
     link = link_[11:]
     if len(link) == 0 or not link_.startswith("flashget://"):
         print("`{}`不是快车链接！".format(link_))
@@ -313,8 +293,6 @@ def linkConverter(link_) -> dict:
 
 # md5(str[, encoding]) or md5(bytes) or md5(int)
 def md5(*_str):
-    # 需要的模块：hashlib。
-    # The required module: hashlib.
     if len(_str) > 0:
         t = _str[0]
         if type(t) is not str:
@@ -336,10 +314,6 @@ def md5(*_str):
 # tools.meiriyiwen().print()
 def meiriyiwen(fdir="./cache/", new=False):
     """fdir: 缓存文件夹。new: 重新请求，默认优先使用已有缓存。"""
-    # 需要的模块：os, lxml。
-    # 不包含调用函数中使用的模块。
-    # The required module: os, lxml.
-    # Does not contain the modules used in the calling function.
     class SimpleArticle:
         def __init__(self):
             self.title = ""
@@ -372,13 +346,9 @@ def meiriyiwen(fdir="./cache/", new=False):
     return article
 
 def qqdlLinkGenerator(link_: str) -> str:
-    # 需要的模块：base64。
-    # The required module: base64.
     return "qqdl://" + str(base64.b64encode(link_.encode("utf-8")))[2:-1]
 
 def qqdlLinkRestore(link_: str):
-    # 需要的模块：base64, chardet。
-    # The required module: base64, chardet.
     link = link_[7:]
     if len(link) == 0 or not link_.startswith("qqdl://"):
         print("`{}`不是QQ旋风链接！".format(link_))
@@ -410,8 +380,6 @@ def reload(_module, path=None, raise_=False):
     - path      模块所在的路径，可选
     - raise_    导入失败时是否报错，可选
     """
-    # 需要的模块：sys, importlib。
-    # The required module: sys, importlib.
     if path:
         import sys
         sys_path_temp = list(sys.path)
@@ -432,8 +400,6 @@ def reload(_module, path=None, raise_=False):
 # sendmail
 
 def _sendmail(account, from_name, to, subject, content) -> bool:
-    # 需要的模块：email, smtplib。
-    # The required module: email, smtplib.
     from email.mime.text import MIMEText
     from email.utils import parseaddr,formataddr
     from email.header import Header
@@ -461,10 +427,6 @@ def _sendmail(account, from_name, to, subject, content) -> bool:
 
 def sendmail(username: str, password: str, smtp_host: str, smtp_port: int,
     from_name: str, send_to: str, subject: str="主题", content="内容") -> bool:
-    # 需要的模块：re。
-    # 不包含调用函数中使用的模块。
-    # The required module: re.
-    # Does not contain the modules used in the calling function.
     account = {}
     account["name"] = username.strip()
     account["password"] = password.strip()
@@ -500,14 +462,10 @@ def text2Speech(text) -> None:
             raise err
 
 def thunderLinkGenerator(link_: str) -> str:
-    # 需要的模块：base64。
-    # The required module: base64.
     return "thunder://" + str(base64.b64encode(f"AA{link_}ZZ".encode("utf-8")))[2:-1]
 
 # 迅雷链接还原
 def thunderLinkRestore(link_: str):
-    # 需要的模块：base64, chardet。
-    # The required module: base64, chardet.
     link = link_[10:]
     if len(link) == 0 or not link_.startswith("thunder://"):
         print("`{}`不是迅雷链接！".format(link_))
