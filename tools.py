@@ -86,8 +86,6 @@ def robots_(url1):
         _list1 = re.split(r"\n", r.text)
         list1 = []
         reg = re.compile(r"^User-agent:\s*(.*)", re.I)
-        # reg1 = re.compile(r"^(Disallow):\s*(.*)", re.I)
-        # reg2 = re.compile(r"^(Allow):\s*(.*)", re.I)
         reg12 = re.compile(r"^((Dis)?allow):\s*(.*)", re.I)
         reg3 = re.compile(r"^Crawl-delay:\s*(.*)", re.I)
         regz = re.compile(r"([\{\}\[\]\\\^\.\?\+])")  # {}[]\^.?+ 记起了再补充
@@ -104,10 +102,10 @@ def robots_(url1):
             elif reg12.search(i):
                 # [][1][0] ['Disallow', '/baidu']
                 # [][1][0][0] 'Disallow'
-                if reg__.search(i):  # $标识
-                    list1[-1][1].append([reg12.search(i)[1], ".*?"+reg_.sub(r".*", regz.sub(r"\\\1", reg12.search(i)[3]))])
-                else:
-                    list1[-1][1].append([reg12.search(i)[1], ".*?"+reg_.sub(r".*", regz.sub(r"\\\1", reg12.search(i)[3]))+".*"])
+                tmp = ".*?"+reg_.sub(r".*", regz.sub(r"\\\1", reg12.search(i)[3]))
+                if not reg__.search(i):
+                    tmp += ".*"
+                list1[-1][1].append([reg12.search(i)[1], tmp])
             elif reg3.search(i):
                 list1[-1][2].append(reg3.search(i)[1])
         return list1
