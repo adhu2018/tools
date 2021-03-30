@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import base64
-import chardet
+try:
+    import chardet
+except ImportError:
+    chardet = None
 import hashlib
 import os
 import re
@@ -14,6 +17,19 @@ try:
     session = HTMLSession()
 except ModuleNotFoundError:
     import requests as session
+
+
+def _restore(link) -> str:
+    bytes_ = base64.b64decode(link)
+    try:
+        assert chardet, "Please install the `chardet` module."
+        str_ = bytes_.decode(chardet.detect(bytes_)["encoding"])
+    except (TypeError, AssertionError):
+        try:
+            str_ = bytes_.decode("utf8")
+        except UnicodeDecodeError:
+            str_ = bytes_.decode("gbk")
+    return str_
 
 ############################################################
 # allow
@@ -253,15 +269,7 @@ def flashgetLinkRestore(link_: str):
     if len(link) == 0 or not link_.startswith("flashget://"):
         print("`{}`不是快车链接！".format(link_))
         return None
-    bytes_ = base64.b64decode(link)
-    try:
-        str_ = bytes_.decode(chardet.detect(bytes_)['encoding'])
-    except TypeError:
-        try:
-            str_ = bytes_.decode("utf8")
-        except UnicodeDecodeError:
-            str_ = bytes_.decode("gbk")
-    return str_[10:-10]
+    return _restore(link)[10:-10]
 
 def getIP(_url):
     domain = len(re.findall(r"\.", _url))
@@ -353,15 +361,7 @@ def qqdlLinkRestore(link_: str):
     if len(link) == 0 or not link_.startswith("qqdl://"):
         print("`{}`不是QQ旋风链接！".format(link_))
         return None
-    bytes_ = base64.b64decode(link)
-    try:
-        str_ = bytes_.decode(chardet.detect(bytes_)['encoding'])
-    except TypeError:
-        try:
-            str_ = bytes_.decode("utf8")
-        except UnicodeDecodeError:
-            str_ = bytes_.decode("gbk")
-    return str_
+    return _restore(link)
 
 # 动态加载模块 相当于在{path}路径下使用`import {_module}`
 def reload(_module, path=None, raise_=False):
@@ -470,15 +470,7 @@ def thunderLinkRestore(link_: str):
     if len(link) == 0 or not link_.startswith("thunder://"):
         print("`{}`不是迅雷链接！".format(link_))
         return None
-    bytes_ = base64.b64decode(link)
-    try:
-        str_ = bytes_.decode(chardet.detect(bytes_)['encoding'])
-    except TypeError:
-        try:
-            str_ = bytes_.decode("utf8")
-        except UnicodeDecodeError:
-            str_ = bytes_.decode("gbk")
-    return str_[2:-2]
+    return _restore(link)[2:-2]
 
 
 if __name__ == "__main__":
