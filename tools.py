@@ -12,6 +12,10 @@ try:
 except ImportError:
     win32clipboard = None
 try:
+    from lxml import etree
+except ImportError:
+    etree = None
+try:
     from requests_html import HTMLSession
     session = HTMLSession()
 except ImportError:
@@ -343,7 +347,7 @@ def meiriyiwen(fdir="./cache/", new=False):
     fpath = download("https://meiriyiwen.com/", fdir, new)
     with open(fpath, "r", encoding="utf8") as f:
         _html = f.read()
-        from lxml import etree
+        assert etree, "Please install the `lxml` module."
         html_ = etree.HTML(_html)
     article.title = html_.xpath("//h1")[0].text
     article.author = html_.xpath("//p[@class='article_author']/span")[0].text
