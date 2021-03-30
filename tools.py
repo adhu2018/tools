@@ -528,10 +528,10 @@ def thunderLinkRestore(link_: str):
 if __name__ == "__main__":
     print("部分功能测试（false表示存在异常）\n\r")
     
-    temp = getClipboardData()
-    setClipboardData("test")
-    print("getClipboardData/setClipboardData: ", getClipboardData()=="test")
-    setClipboardData(temp)
+    temp = Clipboard.getData()
+    Clipboard.setData("test")
+    print("getClipboardData/setClipboardData: ", Clipboard.getData()=="test")
+    Clipboard.setData(temp)  # 尝试恢复测试前的剪切板内容
     
     linkList = linkConverter("test")
     print("flashgetLinkGenerator: ",
