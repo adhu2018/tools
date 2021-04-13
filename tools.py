@@ -196,13 +196,17 @@ class Clipboard():
         self.setData(value)
     
     @staticmethod
-    def getData():
-        # Clipboard.getData()
+    def init():
         assert win32clipboard, "Please install the `win32clipboard` module."
         try:
             win32clipboard.CloseClipboard()  # 解决进程异常结束时可能存在的问题
         except:
             pass
+    
+    @staticmethod
+    def getData():
+        # Clipboard.getData()
+        Clipboard.init()
         win32clipboard.OpenClipboard()
         data = win32clipboard.GetClipboardData()
         win32clipboard.CloseClipboard()
@@ -211,11 +215,7 @@ class Clipboard():
     @staticmethod
     def setData(data: str="") -> None:
         # Clipboard.setData()
-        assert win32clipboard, "Please install the `win32clipboard` module."
-        try:
-            win32clipboard.CloseClipboard()  # 解决进程异常结束时可能存在的问题
-        except:
-            pass
+        Clipboard.init()
         win32clipboard.OpenClipboard()
         win32clipboard.EmptyClipboard()
         win32clipboard.SetClipboardText(data)
