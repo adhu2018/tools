@@ -248,6 +248,8 @@ def download(*_str):
         if r.status_code == 200:
             with open(fpath, "wb+") as f:
                 f.write(r.content)
+        else:
+            raise Exception(f"The page request failed, the response code is: {r.status_code}\n\r")
         del r
     return os.path.abspath(fpath)
 
