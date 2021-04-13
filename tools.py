@@ -489,13 +489,17 @@ if __name__ == "__main__":
     print("getClipboardData/setClipboardData: ", Clipboard.getData()=="test")
     Clipboard.setData(temp)  # 尝试恢复测试前的剪切板内容
     
-    linkList = linkConverter("test")
-    print("flashgetLinkGenerator: ",
-        linkList["flashget"]=="flashget://W0ZMQVNIR0VUXXRlc3RbRkxBU0hHRVRd")
-    print("flashgetLinkRestore: ",
-        flashgetLinkRestore("flashget://W0ZMQVNIR0VUXXRlc3RbRkxBU0hHRVRd")=="test")
-    print("qqdlLinkGenerator: ", linkList["qqdl"]=="qqdl://dGVzdA==")
-    print("qqdlLinkRestore: ", qqdlLinkRestore("qqdl://dGVzdA==")=="test")
-    print("thunderLinkGenerator: ", linkList["thunder"]=="thunder://QUF0ZXN0Wlo=")
-    print("thunderLinkRestore: ", thunderLinkRestore("thunder://QUF0ZXN0Wlo=")=="test")
-    pass
+    verify = {
+        "flashget": "flashget://W0ZMQVNIR0VUXXRlc3RbRkxBU0hHRVRd",
+        "qqdl": "qqdl://dGVzdA==",
+        "real": "test",
+        "thunder": "thunder://QUF0ZXN0Wlo="
+    }
+    linkList = linkConverter(verify["real"])
+    print("flashgetLinkGenerator: ", linkList["flashget"]==verify["flashget"])
+    print("flashgetLinkRestore: ", flashgetLinkRestore(verify["flashget"])==verify["real"])
+    print("qqdlLinkGenerator: ", linkList["qqdl"]==verify["qqdl"])
+    print("qqdlLinkRestore: ", qqdlLinkRestore(verify["qqdl"])==verify["real"])
+    print("thunderLinkGenerator: ", linkList["thunder"]==verify["thunder"])
+    print("thunderLinkRestore: ", thunderLinkRestore(verify["thunder"])==verify["real"])
+    os.system("pause")
