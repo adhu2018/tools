@@ -9,6 +9,10 @@ import importlib
 import os
 import re
 import smtplib
+try:
+    import subprocess
+except ImportError:
+    subprocess = None
 import sys
 from email.mime.text import MIMEText
 from email.utils import parseaddr,formataddr
@@ -298,6 +302,92 @@ def getIP(url):
     ip = re.findall("""https://www.ipaddress.com/ipv4/([\d\.]+)""", r.text)
     ip = list(set(ip))
     return ip if ip else False
+
+class hosts:
+    """hosts in Windows"""
+    def __init__(self, path: str=r"C:\WINDOWS\System32\drivers\etc\hosts"):
+        self.path = path
+        os.system(f"copy {self.path} {self.backup}")
+        self.backup = os.path.join(os.getcwd(), "hosts_backup")
+        self.new = os.path.join(os.getcwd(), "hosts_new")
+        # 网络收集，不一定完善
+        self._github_ = [
+            "github.com", "api.github.com", "assets-cdn.github.com", "codeload.github.com",
+            "gist.github.com", "avatars.githubusercontent.com", "camo.githubusercontent.com",
+            "cloud.githubusercontent.com", "favicons.githubusercontent.com", "gist.githubusercontent.com"
+            "raw.githubusercontent.com", "user-images.githubusercontent.com", "github.map.fastly.net",
+            "github.githubassets.com", "github.global.ssl.fastly.net", "collector.githubapp.com",
+            "github-releases.githubusercontent.com"
+        ]
+    
+    def addGithub(self):
+        os.system(f"copy {self.backup} {self.new}")
+        with open(self.backup, "r", encoding="utf-8") as f:
+            data = f.readlines()
+        with open(self.new, "a+", encoding="utf-8") as f:
+            f.write("# Github")
+            for value in self._github_:
+                try:
+                    ip_value = getIP(value)
+                except AssertionError:  # 网页请求失败
+                    continue
+                print(f"{ip_value}    {value}")
+                if ip_value:
+                    for i in ip_value:
+                        f.write(f"{i}    {value}\n")
+                    continue
+        assert chardet, "Please install the `subprocess` module."
+        subprocess.call(["copy", self.new, self.path, "/y"],shell=True)  # 复制到系统hosts路径
+        subprocess.call(["ipconfig", "/flushdns"],shell=True)  # 刷新DNS缓存
+        os.remove(self.new)
+    
+    def removeGithub(self):
+        with open(self.backup, "r", encoding="utf-8") as f:
+            data = f.readlines()
+        with open(self.new, "w+", encoding="utf-8") as f:  # 清空文件
+            pass
+        _all_ = []
+        with open(self.new, "a+", encoding="utf-8") as f:
+            for i in data:
+                if "github" in i:
+                    if re.search(r"^#", i): continue  # 注释行
+                    value = re.search(r"\d+\.\d+\.\d+\.\d+\s+([^\s]+)", i)[1]  # ipv4
+                    if value: continue
+                f.write(i)  # 其他
+        assert chardet, "Please install the `subprocess` module."
+        subprocess.call(["copy", self.new, self.path, "/y"],shell=True)  # 复制到系统hosts路径
+        subprocess.call(["ipconfig", "/flushdns"],shell=True)  # 刷新DNS缓存
+        os.remove(self.new)
+    
+    def updateGithub(self):
+        with open(self.backup, "r", encoding="utf-8") as f:
+            data = f.readlines()
+        with open(self.new, "w+", encoding="utf-8") as f:  # 清空文件
+            pass
+        _all_ = []
+        with open(self.new, "a+", encoding="utf-8") as f:
+            for i in data:
+                if "github" in i:
+                    if re.search(r"^#", i): continue  # 注释行
+                    value = re.search(r"\d+\.\d+\.\d+\.\d+\s+([^\s]+)", i)[1]  # ipv4
+                    if value in _all_: continue
+                    _all_.append(value)
+                    try:
+                        ip_value = getIP(value)
+                    except AssertionError:  # 网页请求失败
+                        f.write(i)  # 保持不变
+                        print(str(i))
+                        continue
+                    print(f"{ip_value}    {value}")
+                    if ip_value:
+                        for j in ip_value:
+                            f.write(f"{j}    {value}\n")
+                        continue
+                f.write(i)  # 其他
+        assert chardet, "Please install the `subprocess` module."
+        subprocess.call(["copy", self.new, self.path, "/y"],shell=True)  # 复制到系统hosts路径
+        subprocess.call(["ipconfig", "/flushdns"],shell=True)  # 刷新DNS缓存
+        os.remove(self.new)
 
 def linkConverter(link_) -> dict:
     linkList = {}
