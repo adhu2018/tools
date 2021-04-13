@@ -285,16 +285,16 @@ def flashgetLinkRestore(link_: str):
         return None
     return _restore(link)[10:-10]
 
-def getIP(_url):
-    domain = len(re.findall(r"\.", _url))
+def getIP(url):
+    domain = len(re.findall(r"\.", url))
     if domain<1:
         return False
     assert session, "Please install the `requests_html` or `requests` module."
     if domain==1:
-        r = session.get("https://{}.ipaddress.com".format(_url))
+        r = session.get("https://{}.ipaddress.com".format(url))
     else:
-        domain = re.search(r"[^\.]+\.[^\.]+$", _url)[0]
-        r = session.get("https://{}.ipaddress.com/{}".format(domain, _url))
+        domain = re.search(r"[^\.]+\.[^\.]+$", url)[0]
+        r = session.get("https://{}.ipaddress.com/{}".format(domain, url))
     ip = re.findall("""https://www.ipaddress.com/ipv4/([\d\.]+)""", r.text)
     ip = list(set(ip))
     return ip if ip else False
