@@ -394,6 +394,7 @@ class hosts:
         os.remove(self.new)
 
 class image:
+    @staticmethod
     def compress(img: str, out: str="", out_size: int=150, step: int=10, quality: int=80):
         """保持图片长宽比例，压缩到指定大小size(KB)"""
         assert Image, "Please install the `PIL` module."
