@@ -26,6 +26,10 @@ try:
 except ImportError:
     etree = None
 try:
+    from PIL import Image
+except ImportError:
+    Image = None
+try:
     from requests_html import HTMLSession
     session = HTMLSession()
 except ImportError:
@@ -388,6 +392,28 @@ class hosts:
         subprocess.call(["copy", self.new, self.path, "/y"],shell=True)  # 复制到系统hosts路径
         subprocess.call(["ipconfig", "/flushdns"],shell=True)  # 刷新DNS缓存
         os.remove(self.new)
+
+class image:
+    def compress(img: str, out: str="", out_size: int=150, step: int=10, quality: int=80):
+        """保持图片长宽比例，压缩到指定大小size(KB)"""
+        assert Image, "Please install the `PIL` module."
+        img_size = os.path.getsize(img) / 1024
+        if img_size <= out_size:
+            return img
+        name, suffix = os.path.splitext(img)
+        if not out:
+            out = f"{name}_compress{suffix}"
+        im = Image.open(img)
+        if re.search("jpe?g", os.path.splitext(out)[1], re.I):
+            im = im.convert("RGB")  # fix `OSError: cannot write mode RGBA as JPEG`
+        while img_size > out_size:
+            im.save(out, quality=quality)
+            img_size = os.path.getsize(out) / 1024
+            if quality - step < 0:
+                if step < 1: break
+                step /= 2  # 动态调整
+            quality -= step
+        return out, img_size
 
 def linkConverter(link_) -> dict:
     linkList = {}
