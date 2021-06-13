@@ -411,7 +411,7 @@ class image:
             im.save(out, quality=quality)
             img_size = os.path.getsize(out) / 1024
             if quality - step < 0:
-                if step < 1: break
+                if step < 1 or quality <= 0: break
                 step /= 2  # 动态调整
             quality -= step
         return out, img_size
