@@ -340,7 +340,7 @@ class hosts:
                     for i in ip_value:
                         f.write(f"{i}    {value}\n")
                     continue
-        assert chardet, "Please install the `subprocess` module."
+        assert subprocess, "Please install the `subprocess` module."
         subprocess.call(["copy", self.new, self.path, "/y"],shell=True)  # 复制到系统hosts路径
         subprocess.call(["ipconfig", "/flushdns"],shell=True)  # 刷新DNS缓存
         os.remove(self.new)
@@ -358,7 +358,7 @@ class hosts:
                     value = re.search(r"\d+\.\d+\.\d+\.\d+\s+([^\s]+)", i)[1]  # ipv4
                     if value: continue
                 f.write(i)  # 其他
-        assert chardet, "Please install the `subprocess` module."
+        assert subprocess, "Please install the `subprocess` module."
         subprocess.call(["copy", self.new, self.path, "/y"],shell=True)  # 复制到系统hosts路径
         subprocess.call(["ipconfig", "/flushdns"],shell=True)  # 刷新DNS缓存
         os.remove(self.new)
@@ -388,7 +388,7 @@ class hosts:
                             f.write(f"{j}    {value}\n")
                         continue
                 f.write(i)  # 其他
-        assert chardet, "Please install the `subprocess` module."
+        assert subprocess, "Please install the `subprocess` module."
         subprocess.call(["copy", self.new, self.path, "/y"],shell=True)  # 复制到系统hosts路径
         subprocess.call(["ipconfig", "/flushdns"],shell=True)  # 刷新DNS缓存
         os.remove(self.new)
