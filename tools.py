@@ -571,7 +571,7 @@ def sendmail(username: str, password: str, smtp_host: str, smtp_port: int,
 # 文本转语音，win10测试可行
 def text2Speech(text) -> None:
     try:
-        import win32com.client
+        import win32com.client  # pip install pypiwin32
         # Microsoft Speech API
         speak = win32com.client.Dispatch("SAPI.SpVoice")
         speak.Speak(text)
