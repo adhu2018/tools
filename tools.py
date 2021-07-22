@@ -576,12 +576,35 @@ def text2Speech(text) -> None:
         speak = win32com.client.Dispatch("SAPI.SpVoice")
         speak.Speak(text)
     except ImportError:
+        """
+        语音识别的接口在我这电脑上不知道为什么用不了。
+        """
         try:
             import speech
-            """
-            这个的python3版本有问题，需要稍微改一下；
-            还有语音识别的接口，不过在我这电脑上不知道为什么用不了。
-            """
+            speech.say(text)
+        except SyntaxError:
+            print("autofix start")
+            import os, sys
+            for i in sys.path:
+                if i.endswith("lib\\site-packages"):
+                    path = os.path.join(i, "speech.py")
+                    path_bak = os.path.join(i, "speech.py.bak")
+                    if os.path.exists(path):
+                        with open(path, "r", encoding="utf8") as f:
+                            data = f.read()
+                    with open(path_bak, "w", encoding="utf8") as f:
+                        f.write(data)
+                        print(f"backup: {path} => {path_bak}")
+                    # python 有个 2to3 的小工具，但是这里的改动很少，直接替换也行
+                    data = data.replace("import thread", "import _thread")\
+                            .replace("print prompt", "print(prompt)")\
+                            .replace("thread.start_new_thread(loop, ())",
+                                "_thread.start_new_thread(loop, ())")
+                    with open(path, "w", encoding="utf8") as f:
+                        f.write(data)
+            
+            print("autofix end")
+            import speech
             speech.say(text)
         except ImportError as err:
             raise err
