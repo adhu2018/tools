@@ -311,8 +311,8 @@ class hosts:
     """hosts in Windows"""
     def __init__(self, path: str=r"C:\WINDOWS\System32\drivers\etc\hosts"):
         self.path = path
-        os.system(f"copy {self.path} {self.backup}")
         self.backup = os.path.join(os.getcwd(), "hosts_backup")
+        os.system(f"copy {self.path} {self.backup}")
         self.new = os.path.join(os.getcwd(), "hosts_new")
         # 网络收集，不一定完善
         self._github_ = [
