@@ -329,7 +329,7 @@ class hosts:
         with open(self.backup, "r", encoding="utf-8") as f:
             data = f.readlines()
         with open(self.new, "a+", encoding="utf-8") as f:
-            f.write("# Github")
+            f.write("# Github\n")
             for value in self._github_:
                 try:
                     ip_value = getIP(value)
