@@ -321,13 +321,15 @@ class hosts:
         self._github_ = [
             "github.com", "api.github.com", "assets-cdn.github.com", "codeload.github.com",
             "gist.github.com", "avatars.githubusercontent.com", "camo.githubusercontent.com",
-            "cloud.githubusercontent.com", "favicons.githubusercontent.com", "gist.githubusercontent.com"
+            "cloud.githubusercontent.com", "favicons.githubusercontent.com", "gist.githubusercontent.com",
             "raw.githubusercontent.com", "user-images.githubusercontent.com", "github.map.fastly.net",
             "github.githubassets.com", "github.global.ssl.fastly.net", "collector.githubapp.com",
             "github-releases.githubusercontent.com"
         ]
     
     def addGithub(self):
+        self.removeGithub()
+        os.system(f"copy {self.path} {self.backup}")
         os.system(f"copy {self.backup} {self.new}")
         with open(self.backup, "r", encoding="utf-8") as f:
             data = f.readlines()
