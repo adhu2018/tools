@@ -303,8 +303,11 @@ def getIP(url):
     else:
         domain = re.search(r"[^\.]+\.[^\.]+$", url)[0]
         r = session.get("https://{}.ipaddress.com/{}".format(domain, url))
-    ip = re.findall("""https://www.ipaddress.com/ipv4/([\d\.]+)""", r.text)
-    ip = list(set(ip))
+    _ip = re.findall("""https://www.ipaddress.com/ipv4/([\d\.]+)""", r.text)
+    ip = []
+    for i in _ip:
+        if i not in ip:
+            ip.append(i)
     return ip if ip else False
 
 class hosts:
