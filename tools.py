@@ -100,12 +100,22 @@ def robots_(url):
         "*" 匹配0或多个任意字符
     """
     assert session, "Please install the `requests_html` or `requests` module."
-    try:
-        r = session.get(url)
-    except:  # 尽量验证签名，（使用fiddler等）证书验证有问题时不验证签名。会有一个Warning，这样你就知道当前是没有验证签名的。也可以直接不验证签名，然后把Warning去掉，但不推荐。
-        r = session.get(url, verify=False)
-    if r.status_code == 200:
-        _list1 = re.split(r"\n", r.text)
+    cache = f"{md5(url)}.cache"
+    status_code = None
+    if not os.path.exists(cache):
+        try:
+            r = session.get(url)
+        except:  # 尽量验证签名，（使用fiddler等）证书验证有问题时不验证签名。会有一个Warning，这样你就知道当前是没有验证签名的。也可以直接不验证签名，然后把Warning去掉，但不推荐。
+            r = session.get(url, verify=False)
+        status_code = r.status_code
+        text = r.text
+        with open(cache, "w", encoding="utf8") as f:
+            f.write(text)
+    else:
+        with open(cache, "r", encoding="utf8") as f:
+            text = f.read()
+    if status_code == 200:
+        _list1 = re.split(r"\n", text)
         list1 = []
         reg = re.compile(r"^User-agent:\s*(.*)", re.I)
         reg12 = re.compile(r"^((Dis)?allow):\s*(.*)", re.I)
