@@ -94,7 +94,7 @@ def _robots(_url):
             return False
 
 # _
-def robots_(url1):
+def robots_(url):
     """
     任何一条Disallow记录为空，说明该网站的所有部分都允许被访问，在"/robots.txt"文件中，至少要有一条Disallow记录。
     如果"/robots.txt"是一个空文件，则对于所有的搜索引擎robot，该网站都是开放的。
@@ -106,9 +106,9 @@ def robots_(url1):
     """
     assert session, "Please install the `requests_html` or `requests` module."
     try:
-        r = session.get(url1)
+        r = session.get(url)
     except:  # 尽量验证签名，（使用fiddler等）证书验证有问题时不验证签名。会有一个Warning，这样你就知道当前是没有验证签名的。也可以直接不验证签名，然后把Warning去掉，但不推荐。
-        r = session.get(url1, verify=False)
+        r = session.get(url, verify=False)
     if r.status_code == 200:
         _list1 = re.split(r"\n", r.text)
         list1 = []
