@@ -9,6 +9,7 @@ import importlib
 import os
 import re
 import smtplib
+import time
 try:
     import subprocess
 except ImportError:
@@ -100,15 +101,20 @@ def robots_(url):
         "*" 匹配0或多个任意字符
     """
     assert session, "Please install the `requests_html` or `requests` module."
-    cache = f"{md5(url)}.cache"
-    status_code = None
+    cache = f"./cache/{md5(url)}"
+    if os.path.exists(cache) and int(time.time()-os.stat(cache).st_mtime)/86400 >= 1:
+        os.remove(cache)
+    status_code = 200
     if not os.path.exists(cache):
+        status_code = "error"
+        text = ""
         try:
-            r = session.get(url)
-        except:  # 尽量验证签名，（使用fiddler等）证书验证有问题时不验证签名。会有一个Warning，这样你就知道当前是没有验证签名的。也可以直接不验证签名，然后把Warning去掉，但不推荐。
-            r = session.get(url, verify=False)
-        status_code = r.status_code
-        text = r.text
+            r = session.get(url, timeout=5, verify=False)
+            status_code = r.status_code
+            text = r.text
+        except:
+            pass
+            
         with open(cache, "w", encoding="utf8") as f:
             f.write(text)
     else:
@@ -257,7 +263,7 @@ def download(*_str):
         new = False
     if new or not os.path.exists(fpath):
         assert session, "Please install the `requests_html` or `requests` module."
-        r = session.get(url)
+        r = session.get(url, timeout=5)
         if r.status_code == 200:
             with open(fpath, "wb+") as f:
                 f.write(r.content)
@@ -304,10 +310,10 @@ def getIP(url):
         return False
     assert session, "Please install the `requests_html` or `requests` module."
     if domain==1:
-        r = session.get("https://{}.ipaddress.com".format(url))
+        r = session.get("https://{}.ipaddress.com".format(url), timeout=5)
     else:
         domain = re.search(r"[^\.]+\.[^\.]+$", url)[0]
-        r = session.get("https://{}.ipaddress.com/{}".format(domain, url))
+        r = session.get("https://{}.ipaddress.com/{}".format(domain, url), timeout=5)
     _ip = re.findall("""https://www.ipaddress.com/ipv4/([\d\.]+)""", r.text)
     ip = []
     for i in _ip:
