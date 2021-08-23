@@ -80,18 +80,13 @@ def allow(*_str) -> bool:
 
 # 拼接链接，尝试http和https
 def _robots(_url):
-    url_com = re.search(r"https?(://[^/]*)", _url)[1]
-    url1 = "http%s/robots.txt" % str(url_com)
-    url2 = "https%s/robots.txt" % str(url_com)
-    list1 = robots_(url1)
+    url_com = str(re.search(r"https?(://[^/]*)", _url)[1])
+    list1 = robots_(f"http{url_com}/robots.txt")
     if list1:
         return list1
     else:
-        list2 = robots_(url2)
-        if list2:
-            return list2
-        else:
-            return False
+        list2 = robots_(f"https{url_com}/robots.txt")
+        return list2 if list2 else False
 
 # _
 def robots_(url):
