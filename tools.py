@@ -102,6 +102,8 @@ def robots_(url):
     """
     assert session, "Please install the `requests_html` or `requests` module."
     cache = f"./cache/{md5(url)}"
+    if not os.path.exists('./cache/'):
+        os.makedirs('./cache/')
     if os.path.exists(cache) and int(time.time()-os.stat(cache).st_mtime)/86400 >= 1:
         os.remove(cache)
     status_code = 200
