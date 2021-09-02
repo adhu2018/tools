@@ -31,13 +31,9 @@ try:
 except ImportError:
     Image = None
 try:
-    from requests_html import HTMLSession
-    session = HTMLSession()
+    import requests as session
 except ImportError:
-    try:
-        import requests as session
-    except ImportError:
-        session = None
+    session = None
 
 
 def _restore(link) -> str:
@@ -102,8 +98,7 @@ def robots_(url):
     """
     assert session, "Please install the `requests_html` or `requests` module."
     cache = f"./cache/{md5(url)}"
-    if not os.path.exists('./cache/'):
-        os.makedirs('./cache/')
+    if not os.path.exists('./cache/'): os.makedirs('./cache/')
     if os.path.exists(cache) and int(time.time()-os.stat(cache).st_mtime)/86400 >= 1:
         os.remove(cache)
     status_code = 200
