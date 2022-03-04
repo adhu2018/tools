@@ -6,6 +6,7 @@ except ImportError:
     chardet = None
 import hashlib
 import importlib
+import json
 import os
 import re
 import smtplib
@@ -435,7 +436,7 @@ def linkConverter(link_) -> dict:
         linkList["real"] = flashgetLinkRestore(link_)
     elif link_.startswith("qqdl://"):
         linkList["real"] = qqdlLinkRestore(link_)
-    elif link_.startswith("thunder://"):
+    elif link_.startswith("thunder://") or link_.startswith("thunderx://"):
         linkList["real"] = thunderLinkRestore(link_)
     else:
         linkList["real"] = link_
@@ -625,11 +626,42 @@ def thunderLinkGenerator(link_: str) -> str:
 
 # 迅雷链接还原
 def thunderLinkRestore(link_: str):
-    link = link_[10:]
-    if len(link) == 0 or not link_.startswith("thunder://"):
+    link = link_[link_.find(':')+3:]
+    if len(link) == 0 or not link_.startswith("thunder"):
         print("`{}`不是迅雷链接！".format(link_))
         return None
-    return _restore(link)[2:-2]
+    elif link_.startswith("thunderx"):
+        '''
+        thunderx://{
+            "thunderInstallPack":"",
+            "threadCount":"",
+            "downloadDir":"",
+            "installFile":"",
+            "runParams":"",
+            "taskGroupName":"",
+            "excludePath":"",
+            "tasks":[{"url":"","originUrl":""},],
+            "createShortcut":null
+        }
+        '''
+        if link.find('{') < 0:
+            print('注意：这个不是下载链接！！')
+            return _restore(link)[2:-2]
+        null = None
+        link_json = json.loads(link)
+        tasks = []
+        for task in link_json['tasks']:
+            _url = thunderLinkRestore(task['originUrl'])
+            # 文件夹结构
+            _task = {
+                "path": _url.replace(link_json['excludePath'], ''), 
+                "url": _url
+            }
+            tasks.append(_task)
+        link_json['tasks'] = tasks
+        return link_json
+    else:
+        return _restore(link)[2:-2]
 
 
 if __name__ == "__main__":
