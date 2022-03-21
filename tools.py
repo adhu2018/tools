@@ -327,14 +327,31 @@ class hosts:
         os.system(f"copy {self.path} {self.backup}")
         self.new = os.path.join(os.getcwd(), "hosts_new")
         # 网络收集，不一定完善
-        self._github_ = [
-            "github.com", "api.github.com", "assets-cdn.github.com", "codeload.github.com",
-            "gist.github.com", "avatars.githubusercontent.com", "camo.githubusercontent.com",
-            "cloud.githubusercontent.com", "favicons.githubusercontent.com", "gist.githubusercontent.com",
-            "raw.githubusercontent.com", "user-images.githubusercontent.com", "github.map.fastly.net",
-            "github.githubassets.com", "github.global.ssl.fastly.net", "collector.githubapp.com",
-            "github-releases.githubusercontent.com"
-        ]
+        self._github_ = ['avatars5.githubusercontent.com',
+            'avatars2.githubusercontent.com',
+            'avatars0.githubusercontent.com', 'github.blog',
+            'github-production-repository-file-5c1aeb.s3.amazonaws.com',
+            'gist.github.com', 'alive.github.com', 'github.community',
+            'github.global.ssl.fastly.net', 'api.github.com',
+            'pipelines.actions.githubusercontent.com',
+            'github.githubassets.com', 'favicons.githubusercontent.com',
+            'github.map.fastly.net', 'central.github.com',
+            'avatars3.githubusercontent.com',
+            'github-releases.githubusercontent.com',
+            'avatars1.githubusercontent.com', 'live.github.com',
+            'gist.githubusercontent.com', 'cloud.githubusercontent.com',
+            'github-cloud.s3.amazonaws.com', 'github.io',
+            'raw.githubusercontent.com', 'collector.github.com',
+            'objects.githubusercontent.com',
+            'user-images.githubusercontent.com',
+            'github-production-user-asset-6210df.s3.amazonaws.com',
+            'github.dev', 'github-com.s3.amazonaws.com', 'github.com',
+            'media.githubusercontent.com', 'codeload.github.com',
+            'camo.githubusercontent.com', 'collector.githubapp.com',
+            'github-production-release-asset-2e65be.s3.amazonaws.com',
+            'githubstatus.com', 'desktop.githubusercontent.com',
+            'avatars4.githubusercontent.com', 'assets-cdn.github.com',
+            'avatars.githubusercontent.com']
     
     def addGithub(self):
         self.removeGithub()
