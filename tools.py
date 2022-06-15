@@ -69,8 +69,7 @@ def allow(*_str) -> bool:
         for i in _list:
             # 爬虫名称或种类
             if i[0] == _type or i[0] == "*":
-                i = i[1]
-                for j in i:  # j ['Disallow', '.*?/s\\?.*']
+                for j in i[1]:  # j ['Disallow', '.*?/s\\?.*']
                     reg = re.compile(j[1], re.I)
                     if reg.match(_url):  # fix 以第一个匹配到的为准。之前的写法是错的。
                         return False if j[0].upper() == "DISALLOW" else True
