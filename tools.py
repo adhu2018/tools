@@ -304,6 +304,10 @@ def flashgetLinkRestore(link_: str):
     return _restore(link)[10:-10]
 
 def getIP(url):
+    # 自行实现
+    return False
+    
+    # 例如
     domain = len(re.findall(r"\.", url))
     if domain<1:
         return False
