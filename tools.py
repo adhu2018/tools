@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import base64
 try:
-    import chardet
+    from chardet import detect
 except ImportError:
-    chardet = None
+    detect = None
 import hashlib
 import importlib
 import json
@@ -39,9 +39,9 @@ except ImportError:
 
 def _restore(link) -> str:
     bytes_ = base64.b64decode(link)
-    assert chardet, "Please install the `chardet` module."
+    assert detect, "Please install the `chardet` module."
     try:
-        str_ = bytes_.decode(chardet.detect(bytes_)["encoding"])
+        str_ = bytes_.decode(detect(bytes_)["encoding"])
     except (TypeError, AssertionError):
         try:
             str_ = bytes_.decode("utf8")
