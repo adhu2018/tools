@@ -6,7 +6,7 @@ except ImportError:
     detect = None
 from hashlib import md5 as _md5
 from importlib import import_module, reload as _reload
-import json
+from json import loads as json_loads
 import os
 import re
 import smtplib
@@ -665,7 +665,7 @@ def thunderLinkRestore(link_: str):
             print('注意：这个不是下载链接！！')
             return _restore(link)[2:-2]
         null = None
-        link_json = json.loads(link)
+        link_json = json_loads(link)
         tasks = []
         for task in link_json['tasks']:
             _url = thunderLinkRestore(task['originUrl'])
