@@ -98,7 +98,7 @@ def robots_(url):
         "$" 匹配行结束符。
         "*" 匹配0或多个任意字符
     """
-    assert session, "Please install the `requests_html` or `requests` module."
+    assert session, "Please install the or `requests` module."
     cache = f"./cache/{md5(url)}"
     if not os.path.exists('./cache/'): os.makedirs('./cache/')
     if os.path.exists(cache) and int(time()-os.stat(cache).st_mtime)/86400 >= 1:
@@ -261,7 +261,7 @@ def download(*_str):
     else:
         new = False
     if new or not os.path.exists(fpath):
-        assert session, "Please install the `requests_html` or `requests` module."
+        assert session, "Please install the or `requests` module."
         r = session.get(url, timeout=5)
         if r.status_code == 200:
             with open(fpath, "wb+") as f:
@@ -307,7 +307,7 @@ def getIP(url):
     domain = len(re.findall(r"\.", url))
     if domain<1:
         return False
-    assert session, "Please install the `requests_html` or `requests` module."
+    assert session, "Please install the or `requests` module."
     domain = re.search(r"[^\./:]+\.[^\.]+$", url)[0]
     try:
         # r = session.get("https://{}.ipaddress.com".format(url), timeout=5)
