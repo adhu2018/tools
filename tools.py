@@ -5,7 +5,7 @@ try:
 except ImportError:
     detect = None
 from hashlib import md5 as _md5
-import importlib
+from importlib import import_module, reload as _reload
 import json
 import os
 import re
@@ -547,8 +547,8 @@ def reload(_module, path=None, raise_=False):
         sys_path_temp = list(sys.path)
         sys.path.insert(0, path)
     try:
-        module_ = importlib.import_module(".", _module)
-        _module_ = importlib.reload(module_)
+        module_ = import_module(".", _module)
+        _module_ = _reload(module_)
         return _module_
     except ImportError as err:
         if path:
