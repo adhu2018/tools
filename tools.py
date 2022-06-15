@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import base64
+from base64 import b64decode, b64encode
 try:
     from chardet import detect
 except ImportError:
@@ -39,7 +39,7 @@ except ImportError:
 
 
 def _restore(link) -> str:
-    bytes_ = base64.b64decode(link)
+    bytes_ = b64decode(link)
     assert detect, "Please install the `chardet` module."
     try:
         str_ = bytes_.decode(detect(bytes_)["encoding"])
@@ -294,7 +294,7 @@ def filter(url, path="blacklist.txt") -> str:
     return url
 
 def flashgetLinkGenerator(link_: str) -> str:
-    return "flashget://" + str(base64.b64encode(f"[FLASHGET]{link_}[FLASHGET]".encode("utf-8")))[2:-1]
+    return "flashget://" + str(b64encode(f"[FLASHGET]{link_}[FLASHGET]".encode("utf-8")))[2:-1]
 
 def flashgetLinkRestore(link_: str):
     link = link_[11:]
@@ -524,7 +524,7 @@ def meiriyiwen(fdir="./cache/", new=False):
     return article
 
 def qqdlLinkGenerator(link_: str) -> str:
-    return "qqdl://" + str(base64.b64encode(link_.encode("utf-8")))[2:-1]
+    return "qqdl://" + str(b64encode(link_.encode("utf-8")))[2:-1]
 
 def qqdlLinkRestore(link_: str):
     link = link_[7:]
@@ -646,7 +646,7 @@ def text2Speech(text) -> None:
             raise err
 
 def thunderLinkGenerator(link_: str) -> str:
-    return "thunder://" + str(base64.b64encode(f"AA{link_}ZZ".encode("utf-8")))[2:-1]
+    return "thunder://" + str(b64encode(f"AA{link_}ZZ".encode("utf-8")))[2:-1]
 
 # 迅雷链接还原
 def thunderLinkRestore(link_: str):
