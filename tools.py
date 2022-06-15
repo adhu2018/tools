@@ -4,7 +4,7 @@ try:
     from chardet import detect
 except ImportError:
     detect = None
-import hashlib
+from hashlib import md5 as _md5
 import importlib
 import json
 import os
@@ -471,7 +471,7 @@ def md5(*_str):
         encode_type = "utf-8"
         if len(_str) > 1:
             encode_type = _str[1]
-        m = hashlib.md5()
+        m = _md5()
         try:
             t = t.encode(encode_type)
         except LookupError:
