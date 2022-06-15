@@ -65,7 +65,6 @@ def allow(*_str) -> bool:
             else:
                 _type = i.upper()
     _list = _robots(_url)
-    b = True  # 默认允许爬取
     if _list:
         for i in _list:
             # 爬虫名称或种类
@@ -75,7 +74,7 @@ def allow(*_str) -> bool:
                     reg = re.compile(j[1], re.I)
                     if reg.match(_url):  # fix 以第一个匹配到的为准。之前的写法是错的。
                         return False if j[0].upper() == "DISALLOW" else True
-    return b
+    return True  # 默认允许爬取
 
 # 拼接链接，尝试http和https
 def _robots(_url):
