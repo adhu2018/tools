@@ -9,8 +9,8 @@ from importlib import import_module, reload as _reload
 from json import loads as json_loads
 import os
 import re
-import time
 from smtplib import SMTP_SSL
+from time import time
 try:
     import subprocess
 except ImportError:
@@ -100,7 +100,7 @@ def robots_(url):
     assert session, "Please install the `requests_html` or `requests` module."
     cache = f"./cache/{md5(url)}"
     if not os.path.exists('./cache/'): os.makedirs('./cache/')
-    if os.path.exists(cache) and int(time.time()-os.stat(cache).st_mtime)/86400 >= 1:
+    if os.path.exists(cache) and int(time()-os.stat(cache).st_mtime)/86400 >= 1:
         os.remove(cache)
     status_code = 200
     if not os.path.exists(cache):
