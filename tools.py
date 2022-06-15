@@ -12,9 +12,9 @@ import re
 from smtplib import SMTP_SSL
 from time import time
 try:
-    import subprocess
+    from subprocess import call
 except ImportError:
-    subprocess = None
+    call = None
 import sys
 from email.mime.text import MIMEText
 from email.utils import parseaddr,formataddr
@@ -33,6 +33,7 @@ except ImportError:
     Image = None
 try:
     import requests as session
+    from requests.exceptions import ConnectTimeout
 except ImportError:
     session = None
 
@@ -311,7 +312,10 @@ def getIP(url):
         r = session.get("https://{}.ipaddress.com".format(url), timeout=5)
     else:
         domain = re.search(r"[^\.]+\.[^\.]+$", url)[0]
-        r = session.get("https://{}.ipaddress.com/{}".format(domain, url), timeout=5)
+        try:
+            r = session.get("https://{}.ipaddress.com/{}".format(domain, url), timeout=5)
+        except ConnectTimeout:
+            return
     _ip = re.findall("""https://www.ipaddress.com/ipv4/([\d\.]+)""", r.text)
     ip = []
     for i in _ip:
@@ -371,10 +375,17 @@ class hosts:
                     for i in ip_value:
                         f.write(f"{i}    {value}\n")
                     continue
-        assert subprocess, "Please install the `subprocess` module."
-        subprocess.call(["copy", self.new, self.path, "/y"],shell=True)  # 复制到系统hosts路径
-        subprocess.call(["ipconfig", "/flushdns"],shell=True)  # 刷新DNS缓存
-        os.remove(self.new)
+        self.flushdns()
+    
+    def flushdns(self):
+        assert call, "Please install the `subprocess` module."
+        msg = call(["copy", self.new, self.path, "/y"],shell=True)  # 复制到系统hosts路径
+        if msg==0:
+            os.remove(self.new)
+            call(["ipconfig", "/flushdns"],shell=True)  # 刷新DNS缓存
+        else:
+            print(f"请手动将 {self.new} 复制到 {self.path}")
+            print("ipconfig /flushdns")
     
     def removeGithub(self):
         with open(self.backup, "r", encoding="utf-8") as f:
@@ -389,10 +400,7 @@ class hosts:
                     value = re.search(r"\d+\.\d+\.\d+\.\d+\s+([^\s]+)", i)[1]  # ipv4
                     if value: continue
                 f.write(i)  # 其他
-        assert subprocess, "Please install the `subprocess` module."
-        subprocess.call(["copy", self.new, self.path, "/y"],shell=True)  # 复制到系统hosts路径
-        subprocess.call(["ipconfig", "/flushdns"],shell=True)  # 刷新DNS缓存
-        os.remove(self.new)
+        self.flushdns()
     
     def updateGithub(self):
         with open(self.backup, "r", encoding="utf-8") as f:
@@ -419,10 +427,7 @@ class hosts:
                             f.write(f"{j}    {value}\n")
                         continue
                 f.write(i)  # 其他
-        assert subprocess, "Please install the `subprocess` module."
-        subprocess.call(["copy", self.new, self.path, "/y"],shell=True)  # 复制到系统hosts路径
-        subprocess.call(["ipconfig", "/flushdns"],shell=True)  # 刷新DNS缓存
-        os.remove(self.new)
+        self.flushdns()
 
 class image:
     @staticmethod
