@@ -308,14 +308,12 @@ def getIP(url):
     if domain<1:
         return False
     assert session, "Please install the `requests_html` or `requests` module."
-    if domain==1:
-        r = session.get("https://{}.ipaddress.com".format(url), timeout=5)
-    else:
-        domain = re.search(r"[^\.]+\.[^\.]+$", url)[0]
-        try:
-            r = session.get("https://{}.ipaddress.com/{}".format(domain, url), timeout=5)
-        except ConnectTimeout:
-            return
+    domain = re.search(r"[^\./:]+\.[^\.]+$", url)[0]
+    try:
+        # r = session.get("https://{}.ipaddress.com".format(url), timeout=5)
+        r = session.get("https://ipaddress.com/website/{}".format(domain), timeout=5)
+    except ConnectTimeout:
+        return
     _ip = re.findall("""https://www.ipaddress.com/ipv4/([\d\.]+)""", r.text)
     ip = []
     for i in _ip:
