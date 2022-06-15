@@ -17,7 +17,7 @@ except ImportError:
     call = None
 import sys
 from email.mime.text import MIMEText
-from email.utils import parseaddr,formataddr
+from email.utils import parseaddr, formataddr
 from email.header import Header
 try:
     import win32clipboard
