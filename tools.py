@@ -20,17 +20,17 @@ from email.mime.text import MIMEText
 from email.utils import parseaddr, formataddr
 from email.header import Header
 try:
-    import win32clipboard
+    from win32clipboard import OpenClipboard, GetClipboardData, CloseClipboard, EmptyClipboard, SetClipboardText
 except ImportError:
-    win32clipboard = None
+    CloseClipboard = None
 try:
-    from lxml import etree
+    from lxml.etree import HTML as etree_HTML
 except ImportError:
-    etree = None
+    etree_HTML = None
 try:
-    from PIL import Image
+    from PIL.Image import open as Image_open
 except ImportError:
-    Image = None
+    Image_open = None
 try:
     import requests as session
     from requests.exceptions import ConnectTimeout
@@ -215,9 +215,9 @@ class Clipboard():
     
     @staticmethod
     def init():
-        assert win32clipboard, "Please install the `win32clipboard` module."
+        assert CloseClipboard, "Please install the `win32clipboard` module."
         try:
-            win32clipboard.CloseClipboard()  # 解决进程异常结束时可能存在的问题
+            CloseClipboard()  # 解决进程异常结束时可能存在的问题
         except:
             pass
     
@@ -225,19 +225,19 @@ class Clipboard():
     def getData():
         # Clipboard.getData()
         Clipboard.init()
-        win32clipboard.OpenClipboard()
-        data = win32clipboard.GetClipboardData()
-        win32clipboard.CloseClipboard()
+        OpenClipboard()
+        data = GetClipboardData()
+        CloseClipboard()
         return data
 
     @staticmethod
     def setData(data: str="") -> None:
         # Clipboard.setData()
         Clipboard.init()
-        win32clipboard.OpenClipboard()
-        win32clipboard.EmptyClipboard()
-        win32clipboard.SetClipboardText(data)
-        win32clipboard.CloseClipboard()
+        OpenClipboard()
+        EmptyClipboard()
+        SetClipboardText(data)
+        CloseClipboard()
 
 # download("http://www.baidu.com"[, path])
 def download(*_str):
@@ -433,14 +433,14 @@ class image:
     @staticmethod
     def compress(img: str, out: str="", out_size: int=150, step: int=10, quality: int=80):
         """保持图片长宽比例，压缩到指定大小size(KB)"""
-        assert Image, "Please install the `PIL` module."
+        assert Image_open, "Please install the `PIL` module."
         img_size = os.path.getsize(img) / 1024
         if img_size <= out_size:
             return img
         name, suffix = os.path.splitext(img)
         if not out:
             out = f"{name}_compress{suffix}"
-        im = Image.open(img)
+        im = Image_open(img)
         if re.search("jpe?g", os.path.splitext(out)[1], re.I):
             im = im.convert("RGB")  # fix `OSError: cannot write mode RGBA as JPEG`
         while img_size > out_size:
@@ -508,8 +508,8 @@ def meiriyiwen(fdir="./cache/", new=False):
     fpath = download("https://meiriyiwen.com/", fdir, new)
     with open(fpath, "r", encoding="utf8") as f:
         _html = f.read()
-        assert etree, "Please install the `lxml` module."
-        html_ = etree.HTML(_html)
+        assert etree_HTML, "Please install the `lxml` module."
+        html_ = etree_HTML(_html)
     article.title = html_.xpath("//h1")[0].text
     article.author = html_.xpath("//p[@class='article_author']/span")[0].text
     content_ = html_.xpath("//div[@class='article_text']//p")
