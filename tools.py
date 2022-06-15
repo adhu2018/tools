@@ -9,8 +9,8 @@ from importlib import import_module, reload as _reload
 from json import loads as json_loads
 import os
 import re
-import smtplib
 import time
+from smtplib import SMTP_SSL
 try:
     import subprocess
 except ImportError:
@@ -572,7 +572,7 @@ def _sendmail(account, from_name, to, subject, content) -> bool:
     msg["Subject"] = subject
     
     try:
-        em = smtplib.SMTP_SSL(account["smtp_host"], account["smtp_port"])
+        em = SMTP_SSL(account["smtp_host"], account["smtp_port"])
         em.login(account["name"], account["password"])
         em.sendmail(msg["From"], msg["To"], msg.as_string())
         em.quit()
